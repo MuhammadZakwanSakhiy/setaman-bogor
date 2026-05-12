@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_profiles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->primary()->references('id')->on('users')->onDelete('cascade');
             $table->text('avatar_url')->nullable();
             $table->text('bio')->nullable();
             $table->text('address')->nullable();
