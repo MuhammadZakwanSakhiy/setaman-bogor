@@ -23,8 +23,8 @@
         <div>
             <h4 class="font-semibold text-brand-dark mb-4">Sosial</h4>
             <ul class="space-y-2 text-sm text-brand">
-                <li><a href="#" class="hover:underline">Instagram</a></li>
-                <li><a href="#" class="hover:underline">YouTube</a></li>
+                <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
+                <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
             </ul>
         </div>
     </div>

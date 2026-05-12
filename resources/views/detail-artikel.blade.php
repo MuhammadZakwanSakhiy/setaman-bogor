@@ -1,28 +1,193 @@
-@extends('layouts.setaman')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mengenal Ekosistem Tanaman Endemik | Setaman Bogor</title>
+    <!-- Tailwind CSS CDN -->
+    
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-white text-gray-800">
 
-@section('title', 'Detail Artikel - Setaman Bogor')
+    <!-- Navbar -->
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 flex-1">
+            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
+            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
+        </div>
+        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
+            <a href="{{ url('/') }}" class="text-gray-500 hover:text-brand transition">Beranda</a>
+            <a href="{{ url('/katalog') }}" class="text-gray-500 hover:text-brand transition">Katalog</a>
+            <a href="{{ url('/artikel') }}" class="text-brand border-b-2 border-brand pb-1">Edukasi</a>
+        </div>
+        <div class="flex space-x-4 text-gray-600 flex-1 justify-end">
+            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition"><i class="fas fa-shopping-cart"></i></a>
+            <a href="{{ url('/login') }}" class="hover:text-brand transition"><i class="fas fa-user"></i></a>
+        </div>
+    </nav>
 
-@section('content')
-<article class="container mx-auto px-6 py-12">
-    <div class="overflow-hidden rounded-3xl bg-brand-light">
-        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1200&q=80" alt="Ekosistem tanaman Bogor" class="h-[420px] w-full object-cover">
+    <!-- Breadcrumb -->
+    <div class="container mx-auto px-6 py-6 text-sm text-gray-500">
+        <a href="{{ url('/artikel') }}" class="hover:text-brand">Edukasi</a> <span class="mx-2">/</span>
+        <span class="text-gray-800 font-medium">Artikel</span>
     </div>
 
-    <div class="mx-auto mt-12 max-w-3xl">
-        <div class="text-xs font-bold uppercase tracking-[0.35em] text-brand">Edukasi & Botani</div>
-        <h1 class="mt-4 text-4xl font-bold leading-tight text-brand-dark">Mengenal Ekosistem Tanaman Endemik di Kawasan Bogor Utara</h1>
-        <p class="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Diunggah: 24 Oktober 2023 oleh Tim Arsitektur Botani</p>
-
-        <div class="prose prose-green mt-8 max-w-none text-gray-600">
-            <p class="leading-8">Bogor telah lama dikenal sebagai kota hujan dengan keanekaragaman hayati yang luar biasa. Dalam upaya pelestarian botani lokal, Setaman Bogor berkomitmen mendokumentasikan dan membagikan pengetahuan mengenai spesies tanaman yang memiliki nilai historis dan ekologis.</p>
-            <p class="leading-8">Kondisi tanah yang lembap dan curah hujan tinggi menciptakan mikroklimat unik. Tanaman seperti pakis, talas-talasan, hingga pohon peneduh besar tumbuh subur tanpa intervensi berlebihan.</p>
-            <blockquote class="my-8 border-l-4 border-brand bg-brand-light p-6 text-xl font-semibold leading-9 text-brand-dark">Menanam bukan hanya soal estetika, melainkan menjaga kesinambungan ekologis yang telah ada selama berabad-abad.</blockquote>
-            <p class="leading-8">Langkah pertama memulai taman botani pribadi adalah memahami karakteristik tempat: intensitas cahaya, kelembapan, drainase, dan pola perawatan harian.</p>
+    <!-- Article Content -->
+    <main class="container mx-auto px-6 pb-16">
+        
+        <!-- Hero Image -->
+        <div class="w-full max-w-5xl mx-auto h-[300px] md:h-[500px] bg-gray-100 rounded-2xl overflow-hidden mb-12">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80" alt="Hutan Tropis" class="w-full h-full object-cover">
         </div>
 
-        <a href="{{ url('/artikel') }}" class="mt-10 inline-flex items-center gap-2 rounded-md bg-brand px-5 py-3 text-sm font-bold text-white hover:bg-brand-dark">
-            <i class="fas fa-arrow-left"></i> Kembali ke Artikel
-        </a>
-    </div>
-</article>
-@endsection
+        <!-- Article Body -->
+        <article class="max-w-3xl mx-auto">
+            
+            <!-- Header Artikel -->
+            <header class="mb-10 text-center md:text-left">
+                <span class="text-xs font-bold text-brand uppercase tracking-widest mb-3 block">Edukasi & Botani</span>
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">Mengenal Ekosistem Tanaman Endemik di Kawasan Bogor Utara</h1>
+                <div class="text-xs text-gray-400 uppercase tracking-widest font-semibold flex flex-wrap justify-center md:justify-start gap-2">
+                    <span>Diunggah: 12 Oktober 2023</span>
+                    <span>&bull;</span>
+                    <span>Oleh: Tim Arsitektur Botani</span>
+                </div>
+            </header>
+
+            <!-- Teks Artikel -->
+            <div class="prose prose-lg text-gray-700 leading-relaxed space-y-6">
+                <p>
+                    Bogor telah lama dikenal sebagai kota hujan dengan keanekaragaman hayati yang luar biasa. Dalam upaya pelestarian botani lokal, Setaman Bogor berkomitmen untuk mendokumentasikan dan membagikan pengetahuan mengenai spesies tanaman yang memiliki nilai historis dan ekologis di wilayah ini.
+                </p>
+                <p>
+                    Kondisi tanah yang lembap dan curah hujan yang tinggi menciptakan mikroklimat unik. Tanaman seperti berbagai jenis pakis, talas-talasan (Araceae), hingga pohon-pohon peneduh besar tumbuh subur tanpa memerlukan intervensi manusia yang berlebihan. Namun, dengan perkembangan urbanisasi, keberadaan mereka mulai terpinggirkan.
+                </p>
+
+                <!-- Blockquote -->
+                <blockquote class="border-l-4 border-brand pl-6 py-2 my-10 bg-brand-light/30 rounded-r-lg">
+                    <p class="text-xl md:text-2xl italic text-brand-dark font-medium leading-snug m-0">
+                        "Menanam bukan hanya soal estetika, melainkan menjaga kesinambungan ekologis yang telah ada selama berabad-abad."
+                    </p>
+                </blockquote>
+
+                <p>
+                    Langkah pertama dalam memulai taman botani pribadi adalah memahami karakteristik tanaman endemik. Tanaman lokal cenderung lebih tahan terhadap hama lokal dan tidak membutuhkan pupuk kimia dalam jumlah besar. Ini adalah prinsip dasar dari arsitektur botani yang berkelanjutan.
+                </p>
+
+                <!-- Inline Image Placeholder -->
+                <div class="my-10 h-64 md:h-96 bg-gray-100 rounded-xl overflow-hidden">
+                     <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e736?auto=format&fit=crop&w=800&q=80" alt="Ilustrasi Tanah Botani" class="w-full h-full object-cover">
+                </div>
+
+                <p>
+                    Dalam katalog kami, Anda dapat menemukan berbagai jenis tanaman yang telah kami seleksi berdasarkan kemudahannya untuk dirawat di lingkungan rumah tinggal. Kami percaya bahwa setiap rumah di Bogor seharusnya memiliki setidaknya satu tanaman endemik untuk mendukung penyerapan air tanah dan menjaga kualitas udara.
+                </p>
+            </div>
+            
+        </article>
+    </main>
+
+    <!-- Related Products Section (Produk Terkait) -->
+    <section class="bg-gray-50 py-16 border-t border-gray-200">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-end mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 uppercase tracking-wide">Produk Terkait</h2>
+                <a href="{{ url('/katalog') }}" class="text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-1 uppercase tracking-wider">Lihat Semua Katalog</a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
+                    <div class="h-48 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=400&q=80" alt="Monstera Adansonii" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Outdoor</span>
+                        <h3 class="font-bold text-gray-900 text-base mb-4">Monstera Adansonii</h3>
+                        <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
+                    <div class="h-48 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=400&q=80" alt="Alocasia Reversa" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Indoor</span>
+                        <h3 class="font-bold text-gray-900 text-base mb-4">Alocasia Reversa</h3>
+                        <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
+                    <div class="h-48 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1603436326446-7dc41f021c7a?auto=format&fit=crop&w=400&q=80" alt="Ficus Lyrata" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Trees</span>
+                        <h3 class="font-bold text-gray-900 text-base mb-4">Ficus Lyrata</h3>
+                        <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
+                    <div class="h-48 bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1600412353723-f2ee4e90cb5d?auto=format&fit=crop&w=400&q=80" alt="Mentha Spicata" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5 flex flex-col flex-grow">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Herbs</span>
+                        <h3 class="font-bold text-gray-900 text-base mb-4">Mentha Spicata</h3>
+                        <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-light pt-16 pb-8 border-t border-green-100">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-8 gap-8 mb-12">
+            <div class="md:col-span-5">
+                <h4 class="text-lg font-bold text-brand-dark mb-4">Setaman Bogor</h4>
+                <p class="text-gray-500 text-sm leading-relaxed">
+                    Cultivating calm in every corner. Solusi penghijauan modern untuk gaya hidup perkotaan Anda.
+                </p>
+            </div>
+            <div class="md:col-span-1">
+                <h4 class="font-semibold text-brand-dark mb-4">Perusahaan</h4>
+                <ul class="space-y-2 text-sm text-brand">
+                    <li><a href="{{ url('/tentang') }}" class="hover:underline">Tentang Kami</a></li>
+                    <li><a href="{{ url('/kontak') }}" class="hover:underline">Kontak</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-1">
+                <h4 class="font-semibold text-brand-dark mb-4">Legal</h4>
+                <ul class="space-y-2 text-sm text-brand">
+                    <li><a href="{{ url('/privasi') }}" class="hover:underline">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-1">
+                <h4 class="font-semibold text-brand-dark mb-4">Sosial Media</h4>
+                <ul class="space-y-2 text-sm text-brand">
+                    <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
+                    <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-6 pt-8 border-t border-green-200 text-xs text-gray-400">
+            &copy; 2026 Setaman Bogor
+        </div>
+    </footer>
+
+</body>
+</html>

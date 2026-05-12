@@ -32,7 +32,7 @@
     <div class="mt-8 rounded-2xl border border-green-100 bg-white p-4 shadow-sm">
         <div class="text-xs font-bold uppercase tracking-[0.2em] text-brand">Bantuan</div>
         <p class="mt-2 text-sm leading-6 text-gray-500">Analisis baru laporan tren tanaman tersedia untuk diunduh.</p>
-        <a href="#" class="mt-4 inline-flex rounded-md bg-brand-dark px-4 py-2 text-xs font-bold uppercase tracking-widest text-white">Unduh PDF</a>
+        <a href="javascript:void(0)" class="mt-4 inline-flex rounded-md bg-brand-dark px-4 py-2 text-xs font-bold uppercase tracking-widest text-white">Unduh PDF</a>
     </div>
 
     <a href="{{ url('/') }}" class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-brand">

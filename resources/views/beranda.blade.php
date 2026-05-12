@@ -1,102 +1,187 @@
-@extends('layouts.setaman')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setaman Bogor | Cultivating calm in every corner</title>
+    <!-- Tailwind CSS CDN -->
+    
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-white text-gray-800">
 
-@section('title', 'Setaman Bogor - Beranda')
-
-@section('content')
-<section class="container mx-auto px-6 py-12 md:py-20 flex flex-col-reverse md:flex-row items-center gap-12">
-    <div class="md:w-1/2 space-y-6">
-        <div class="text-xs font-bold uppercase tracking-[0.35em] text-brand">Kesejukan Ruang</div>
-        <h1 class="text-4xl md:text-5xl font-bold text-brand-dark leading-tight">
-            Hadirkan Kesejukan<br>di Ruang Anda
-        </h1>
-        <p class="text-gray-600 text-lg leading-8">
-            Ubah sudut hunian Anda menjadi oase hijau yang menenangkan dengan koleksi tanaman kurasi terbaik dari Setaman Bogor.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3">
-            <a href="{{ url('/katalog') }}" class="inline-flex items-center justify-center gap-2 rounded-md bg-brand px-6 py-3 font-semibold text-white transition hover:bg-brand-dark">
-                Jelajahi Koleksi <i class="fas fa-arrow-right text-sm"></i>
-            </a>
-            <a href="{{ url('/artikel') }}" class="inline-flex items-center justify-center gap-2 rounded-md border border-green-100 px-6 py-3 font-semibold text-brand transition hover:bg-brand-light">
-                Baca Edukasi
-            </a>
+    <!-- Navbar -->
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        
+        <!-- Bagian Kiri: Logo -->
+        <div class="flex items-center gap-2 flex-1">
+            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
+            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
         </div>
-    </div>
-    <div class="md:w-1/2">
-        <img src="https://images.unsplash.com/photo-1604762524889-3e2fcc145683?auto=format&fit=crop&w=900&q=80" alt="Tanaman Monstera" class="h-[420px] w-full rounded-2xl object-cover shadow-lg">
-    </div>
-</section>
 
-<section class="bg-brand-light py-16">
-    <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-        @foreach ([
-            ['icon' => 'fa-comment-dots', 'title' => 'Gratis Konsultasi', 'body' => 'Dapatkan saran ahli untuk memilih dan merawat tanaman yang sesuai ruangan Anda.'],
-            ['icon' => 'fa-check-circle', 'title' => 'Kualitas Terjamin', 'body' => 'Setiap bibit dan tanaman telah melalui proses seleksi serta perawatan yang konsisten.'],
-            ['icon' => 'fa-truck', 'title' => 'Pengiriman Aman', 'body' => 'Kemasan khusus menjaga tanaman tetap segar sampai ke rumah Anda.'],
-        ] as $fitur)
+        <!-- Bagian Tengah: Menu -->
+        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
+            <a href="{{ url('/') }}" class="text-brand border-b-2 border-brand pb-1">Beranda</a>
+            <a href="{{ url('/katalog') }}" class="text-gray-500 hover:text-brand transition">Katalog</a>
+            <a href="{{ url('/artikel') }}" class="text-gray-500 hover:text-brand transition">Edukasi</a>
+        </div>
+
+        <!-- Bagian Kanan: Ikon -->
+        <div class="flex space-x-4 text-gray-600 flex-1 justify-end">
+            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition"><i class="fas fa-shopping-cart"></i></a>
+            <a href="{{ url('/login') }}" class="hover:text-brand transition"><i class="fas fa-user"></i></a>
+        </div>
+
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-6 py-12 md:py-20 flex flex-col-reverse md:flex-row items-center gap-12">
+        <div class="md:w-1/2 space-y-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-brand-dark leading-tight">
+                Hadirkan Kesejukan<br>di Ruang Anda
+            </h1>
+            <p class="text-gray-600 text-lg">
+                Ubah sudut hunian Anda menjadi oase hijau yang menenangkan dengan koleksi tanaman kurasi terbaik dari kami.
+            </p>
+            <button class="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-md font-medium transition flex items-center gap-2">
+                Lihat Katalog <i class="fas fa-arrow-right text-sm"></i>
+            </button>
+        </div>
+        <div class="md:w-1/2">
+            <!-- Placeholder for Hero Image -->
+            <img src="{{ asset('img/beranda.jpeg') }}" alt="Tanaman Monstera" class="rounded-2xl shadow-lg w-full object-cover h-[400px]">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-brand-light py-16">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div class="flex flex-col items-center space-y-4">
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand shadow-sm">
-                    <i class="fas {{ $fitur['icon'] }} text-xl"></i>
+                    <i class="fas fa-comment-dots text-xl"></i>
                 </div>
-                <h3 class="font-semibold text-brand-dark text-lg">{{ $fitur['title'] }}</h3>
-                <p class="text-gray-500 text-sm px-4 leading-6">{{ $fitur['body'] }}</p>
+                <h3 class="font-semibold text-brand-dark text-lg">Gratis Konsultasi</h3>
+                <p class="text-gray-500 text-sm px-4">Dapatkan saran ahli untuk perawatan tanaman Anda secara cuma-cuma.</p>
             </div>
-        @endforeach
-    </div>
-</section>
+            <div class="flex flex-col items-center space-y-4">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand shadow-sm">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <h3 class="font-semibold text-brand-dark text-lg">Kualitas Terjamin</h3>
+                <p class="text-gray-500 text-sm px-4">Setiap bibit dan tanaman telah melalui proses seleksi ketat.</p>
+            </div>
+            <div class="flex flex-col items-center space-y-4">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-brand shadow-sm">
+                    <i class="fas fa-truck text-xl"></i>
+                </div>
+                <h3 class="font-semibold text-brand-dark text-lg">Pengiriman Aman</h3>
+                <p class="text-gray-500 text-sm px-4">Kemasan khusus yang menjaga tanaman tetap segar hingga tujuan.</p>
+            </div>
+        </div>
+    </section>
 
-<section class="container mx-auto px-6 py-20">
-    <div class="mb-10 flex items-end justify-between gap-4">
-        <div>
-            <div class="text-xs font-bold uppercase tracking-[0.3em] text-brand">Kategori</div>
-            <h2 class="mt-3 text-2xl font-bold text-brand-dark">Pilihan Terbaik</h2>
+    <!-- Popular Categories Section -->
+    <section class="container mx-auto px-6 py-20">
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold text-brand-dark">Kategori Populer</h2>
             <p class="text-gray-500 mt-2">Pilihan favorit para pecinta kebun perkotaan.</p>
         </div>
-        <a href="{{ url('/katalog') }}" class="hidden text-sm font-semibold text-brand hover:underline md:inline">Lihat Semua</a>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        @foreach ([
-            ['title' => 'Indoor', 'body' => 'Tanaman pembersih udara untuk ruang tamu dan kamar.', 'image' => 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80'],
-            ['title' => 'Bibit Sayur', 'body' => 'Mulai kebun mandiri Anda dari benih pilihan berkualitas.', 'image' => 'https://images.unsplash.com/photo-1592424001801-09439c1b7e41?auto=format&fit=crop&w=800&q=80'],
-        ] as $kategori)
-            <a href="{{ url('/katalog') }}" class="relative h-64 overflow-hidden rounded-2xl group">
-                <img src="{{ $kategori['image'] }}" alt="{{ $kategori['title'] }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Category Card 1 -->
+            <div class="relative h-64 rounded-2xl overflow-hidden group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&q=80" alt="Tanaman Indoor" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div class="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+                <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                     <div>
-                        <h3 class="text-xl font-semibold text-white">{{ $kategori['title'] }}</h3>
-                        <p class="mt-1 text-sm text-gray-200">{{ $kategori['body'] }}</p>
+                        <h3 class="text-white text-xl font-semibold">Tanaman Indoor</h3>
+                        <p class="text-gray-200 text-sm">Segarkan udara di dalam ruangan.</p>
                     </div>
-                    <div class="grid h-9 w-9 place-items-center rounded-full bg-white/20 text-white backdrop-blur-sm">
+                    <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white">
                         <i class="fas fa-arrow-up-right-from-square text-xs"></i>
                     </div>
                 </div>
-            </a>
-        @endforeach
-    </div>
-</section>
-
-<section class="container mx-auto px-6 py-16 mb-16">
-    <div class="rounded-3xl border border-gray-100 bg-white p-8 shadow-sm md:p-12 flex flex-col md:flex-row gap-12 items-center">
-        <div class="md:w-1/2 relative">
-            <img src="https://images.unsplash.com/photo-1611843467160-25afb8df1074?auto=format&fit=crop&w=800&q=80" alt="Mengenal Setaman" class="h-[350px] w-full rounded-2xl object-cover">
-            <div class="absolute -bottom-6 right-4 rounded-xl border border-white bg-green-200 px-6 py-4 shadow-lg md:-right-6">
-                <div class="text-2xl font-bold text-brand-dark">10k+</div>
-                <div class="text-xs font-semibold tracking-wider text-brand">POHON TERTANAM</div>
+            </div>
+            <!-- Category Card 2 -->
+            <div class="relative h-64 rounded-2xl overflow-hidden group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1592424001801-09439c1b7e41?auto=format&fit=crop&w=600&q=80" alt="Bibit Sayur" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+                    <div>
+                        <h3 class="text-white text-xl font-semibold">Bibit Sayur</h3>
+                        <p class="text-gray-200 text-sm">Mulai kebun sayur organik Anda sendiri.</p>
+                    </div>
+                    <div class="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-arrow-up-right-from-square text-xs"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="md:w-1/2 space-y-6">
-            <div class="text-xs font-bold uppercase tracking-[0.3em] text-brand">Kisah Setaman</div>
-            <h2 class="text-3xl font-bold text-brand-dark">Mengenal Setaman Bogor</h2>
-            <p class="text-gray-600 leading-7 text-sm">
-                Berawal dari kecintaan terhadap flora tropis Indonesia, Setaman Bogor hadir sebagai jembatan antara alam dan kehidupan urban.
-            </p>
-            <p class="text-gray-600 leading-7 text-sm">
-                Kami menyediakan tanaman berkualitas tinggi yang dirawat dengan teknik botani modern agar siap mempercantik hunian Anda.
-            </p>
-            <a href="{{ url('/tentang') }}" class="inline-block text-brand font-semibold hover:underline">
-                Pelajari Lebih Lanjut <i class="fas fa-external-link-alt text-xs ml-1"></i>
-            </a>
+    </section>
+
+    <!-- About Section -->
+    <section class="container mx-auto px-6 py-16 mb-16">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center">
+            <div class="md:w-1/2 relative">
+                <img src="https://images.unsplash.com/photo-1611843467160-25afb8df1074?auto=format&fit=crop&w=600&q=80" alt="Mengenal Setaman" class="rounded-2xl object-cover h-[350px] w-full">
+                <!-- Floating Badge -->
+                <div class="absolute -bottom-6 right-4 md:-right-6 bg-green-200 px-6 py-4 rounded-xl shadow-lg border border-white">
+                    <div class="text-2xl font-bold text-brand-dark">10k+</div>
+                    <div class="text-xs font-semibold text-brand tracking-wider">POHON TERTANAM</div>
+                </div>
+            </div>
+            <div class="md:w-1/2 space-y-6">
+                <h2 class="text-3xl font-bold text-brand-dark">Mengenal Setaman Bogor</h2>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Di Setaman Bogor, kami percaya bahwa setiap jengkal ruang memiliki potensi untuk menjadi sumber ketenangan. Misi kami adalah memberdayakan masyarakat perkotaan untuk mulai menanam, tidak peduli seberapa kecil ruang yang mereka miliki.
+                </p>
+                <p class="text-gray-600 leading-relaxed text-sm">
+                    Melalui kurasi tanaman berkualitas dan edukasi berkelanjutan, kami berupaya menghadirkan kembali hubungan yang harmonis antara manusia dan alam di tengah hiruk pikuk kota Bogor.
+                </p>
+                <a href="{{ url('/tentang') }}" class="inline-block mt-4 text-brand font-semibold hover:underline">Pelajari Misi Kami Lebih Lanjut <i class="fas fa-external-link-alt text-xs ml-1"></i>
+                </a>
+            </div>
         </div>
-    </div>
-</section>
-@endsection
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-light pt-16 pb-8 border-t border-green-100">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-8 gap-8 mb-12">
+            <div class="md:col-span-5">
+                <h4 class="text-lg font-bold text-brand-dark mb-4">Setaman Bogor</h4>
+                <p class="text-gray-500 text-sm leading-relaxed">
+                    Cultivating calm in every corner. Solusi penghijauan modern untuk gaya hidup perkotaan Anda.
+                </p>
+            </div>
+            <div class="md:col-span-1">
+                <h4 class="font-semibold text-brand-dark mb-4">Perusahaan</h4>
+                <ul class="space-y-2 text-sm text-brand">
+                    <li><a href="{{ url('/tentang') }}" class="hover:underline">Tentang Kami</a></li>
+                    <li><a href="{{ url('/kontak') }}" class="hover:underline">Kontak</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-1">
+                <h4 class="font-semibold text-brand-dark mb-4">Legal</h4>
+                <ul class="space-y-2 text-sm text-brand">
+                    <li><a href="{{ url('/privasi') }}" class="hover:underline">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-1">
+                <h4 class="font-semibold text-brand-dark mb-4">Sosial Media</h4>
+                <ul class="space-y-2 text-sm text-brand">
+                    <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
+                    <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-6 pt-8 border-t border-green-200 text-xs text-gray-400">
+            &copy; 2026 Setaman Bogor
+        </div>
+    </footer>
+    
+
+</body>
+</html>
