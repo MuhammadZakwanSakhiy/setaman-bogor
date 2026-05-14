@@ -1,105 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Setaman Bogor</title>
-    <!-- Tailwind CSS CDN -->
-    
-    <!-- Font Awesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
+@extends('layouts.admin')
 
-    <!-- Sidebar (Kiri) -->
-    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 hidden md:flex">
-        <!-- Logo & Title Area -->
-        <div class="h-20 flex flex-col justify-center px-6 border-b border-gray-200">
-            <h1 class="font-bold text-gray-900 text-lg">Admin Panel</h1>
-            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Setaman Bogor</p>
-        </div>
+@section('title', 'Dashboard | Setaman Bogor Admin')
 
-        <!-- Navigation Links -->
-        <nav class="flex-1 py-6 flex flex-col gap-2">
-            <!-- Active Menu -->
-            <a href="javascript:void(0)" class="flex items-center gap-3 px-6 py-3 bg-brand text-white font-semibold text-sm transition">
-                <i class="fas fa-th-large w-5 text-center"></i>
-                Dashboard
-            </a>
-            <!-- Inactive Menu -->
-            <a href="javascript:void(0)" class="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-brand-light hover:text-brand font-medium text-sm transition">
-                <i class="fas fa-box w-5 text-center"></i>
-                Kelola Produk
-            </a>
-            <a href="javascript:void(0)" class="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-brand-light hover:text-brand font-medium text-sm transition">
-                <i class="fas fa-newspaper w-5 text-center"></i>
-                Kelola Artikel
-            </a>
-            <a href="javascript:void(0)" class="flex items-center gap-3 px-6 py-3 text-gray-600 hover:bg-brand-light hover:text-brand font-medium text-sm transition">
-                <i class="fas fa-shopping-cart w-5 text-center"></i>
-                Kelola Pesanan
-            </a>
-        </nav>
-
-        <!-- Bottom Actions -->
-        <div class="p-6 border-t border-gray-200 space-y-4">
-            <a href="javascript:void(0)" class="flex items-center gap-3 text-gray-600 hover:text-brand font-medium text-sm transition">
-                <i class="far fa-question-circle w-5 text-center"></i>
-                Bantuan
-            </a>
-            <a href="{{ url('/login') }}" class="flex items-center justify-center gap-2 w-full bg-black hover:bg-gray-800 text-white font-bold py-3 rounded-md transition text-xs uppercase tracking-wider mt-4">
-                Logout
-            </a>
-        </div>
-    </aside>
-
-    <!-- Main Content Wrapper (Kanan) -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
-        
-        <!-- Topbar Header -->
-        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0 z-10">
-            <!-- Mobile Menu Button (Hidden on Desktop) -->
-            <button class="md:hidden text-gray-600 hover:text-brand mr-4">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-            
-            <h2 class="font-black text-gray-900 text-lg tracking-wider hidden sm:block">SETAMAN BOGOR ADMIN</h2>
-            
-            <div class="flex items-center gap-6 ml-auto">
-                <!-- Search Box -->
-                <div class="relative hidden lg:block">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs"></i>
-                    <input type="text" placeholder="Search..." class="border border-gray-300 rounded-md py-1.5 pl-8 pr-4 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand w-64">
-                </div>
-                
-                <!-- Icons -->
-                <div class="flex items-center gap-4 text-gray-500">
-                    <button class="hover:text-brand transition relative">
-                        <i class="far fa-bell text-lg"></i>
-                        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-                    </button>
-                    <button class="hover:text-brand transition">
-                        <i class="fas fa-cog text-lg"></i>
-                    </button>
-                </div>
-
-                <!-- Admin Profile Pic -->
-                <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden border border-gray-300 cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Admin" class="w-full h-full object-cover">
-                </div>
-            </div>
-        </header>
-
-        <!-- Scrollable Dashboard Content -->
-        <main class="flex-1 overflow-y-auto p-6 md:p-8">
-            
+@section('content')
             <!-- Welcome Header -->
             <div class="mb-8 border-b border-dotted border-blue-400 pb-4">
                 <h2 class="text-2xl font-bold text-gray-900 mb-1">RINGKASAN DASHBOARD</h2>
-                <p class="text-sm text-gray-500">Selamat datang kembali, Admin. Berikut adalah performa toko hari ini.</p>
+                <p class="text-sm text-gray-500">Selamat datang kembali, {{ Auth::user()->name }}. Berikut adalah performa toko hari ini.</p>
             </div>
 
             <!-- Stats Grid (4 Cards) -->
@@ -107,23 +14,23 @@
                 <!-- Card 1 -->
                 <div class="bg-white p-6 border border-gray-200 shadow-sm rounded-lg flex flex-col justify-between hover:border-brand transition">
                     <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Total Pesanan</p>
-                    <h3 class="text-3xl font-bold text-gray-900 mb-4">1,284</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">{{ number_format($totalOrders) }}</h3>
                     <p class="text-xs text-green-600 font-semibold flex items-center gap-1">
-                        <i class="fas fa-arrow-trend-up"></i> +12% BULAN INI
+                        <i class="fas fa-shopping-bag"></i> PESANAN MASUK
                     </p>
                 </div>
                 <!-- Card 2 (Warning) -->
                 <div class="bg-white p-6 border border-red-200 shadow-sm rounded-lg flex flex-col justify-between hover:border-red-300 transition">
                     <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Stok Menipis</p>
-                    <h3 class="text-3xl font-bold text-red-600 mb-4">08</h3>
-                    <a href="javascript:void(0)" class="text-xs text-gray-700 font-bold border-b border-gray-700 hover:text-red-600 hover:border-red-600 transition pb-0.5 w-max uppercase tracking-wider">
+                    <h3 class="text-3xl font-bold text-red-600 mb-4">{{ sprintf('%02d', $lowStockCount) }}</h3>
+                    <a href="{{ route('products.index') }}" class="text-xs text-gray-700 font-bold border-b border-gray-700 hover:text-red-600 hover:border-red-600 transition pb-0.5 w-max uppercase tracking-wider">
                         LIHAT DETAIL
                     </a>
                 </div>
                 <!-- Card 3 -->
                 <div class="bg-white p-6 border border-gray-200 shadow-sm rounded-lg flex flex-col justify-between hover:border-brand transition">
                     <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Total Produk</p>
-                    <h3 class="text-3xl font-bold text-gray-900 mb-4">245</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">{{ number_format($totalProducts) }}</h3>
                     <p class="text-xs text-gray-500 font-medium flex items-center gap-1">
                         <i class="far fa-folder-open"></i> KATALOG AKTIF
                     </p>
@@ -131,7 +38,7 @@
                 <!-- Card 4 -->
                 <div class="bg-white p-6 border border-gray-200 shadow-sm rounded-lg flex flex-col justify-between hover:border-brand transition">
                     <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Total Artikel</p>
-                    <h3 class="text-3xl font-bold text-gray-900 mb-4">56</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">{{ number_format($totalArticles) }}</h3>
                     <p class="text-xs text-gray-500 font-medium flex items-center gap-1">
                         <i class="far fa-file-alt"></i> KONTEN EDUKASI
                     </p>
@@ -151,7 +58,7 @@
                 <div class="w-full h-72 bg-gray-50 border border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 rounded">
                     <i class="fas fa-chart-line text-4xl mb-3"></i>
                     <p class="text-sm font-medium uppercase tracking-widest">Area Grafik Interaktif</p>
-                    <p class="text-xs">(Gunakan Chart.js atau ApexCharts di sini)</p>
+                    <p class="text-xs">(Data real-time sedang dikumpulkan)</p>
                 </div>
             </div>
 
@@ -175,24 +82,30 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($recentOrders as $order)
                                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                    <td class="px-6 py-4 font-mono font-medium text-gray-900">#ORD-0921</td>
-                                    <td class="px-6 py-4">Budi Setiawan</td>
-                                    <td class="px-6 py-4 font-medium">Rp 600.000</td>
-                                    <td class="px-6 py-4"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold uppercase">Diproses</span></td>
+                                    <td class="px-6 py-4 font-mono font-medium text-gray-900">#{{ $order->order_code }}</td>
+                                    <td class="px-6 py-4">{{ $order->customer_name }}</td>
+                                    <td class="px-6 py-4 font-medium">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4">
+                                        @php
+                                            $statusColors = [
+                                                'pending' => 'bg-yellow-100 text-yellow-700',
+                                                'processing' => 'bg-blue-100 text-blue-700',
+                                                'shipped' => 'bg-purple-100 text-purple-700',
+                                                'completed' => 'bg-green-100 text-green-700',
+                                                'cancelled' => 'bg-red-100 text-red-700'
+                                            ];
+                                            $color = $statusColors[strtolower($order->status)] ?? 'bg-gray-100 text-gray-700';
+                                        @endphp
+                                        <span class="px-2 py-1 {{ $color }} rounded text-xs font-bold uppercase">{{ $order->status }}</span>
+                                    </td>
                                 </tr>
-                                <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                    <td class="px-6 py-4 font-mono font-medium text-gray-900">#ORD-0920</td>
-                                    <td class="px-6 py-4">Siti Aminah</td>
-                                    <td class="px-6 py-4 font-medium">Rp 120.000</td>
-                                    <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold uppercase">Selesai</span></td>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-8 text-center text-gray-500 italic">Belum ada pesanan terbaru.</td>
                                 </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 font-mono font-medium text-gray-900">#ORD-0919</td>
-                                    <td class="px-6 py-4">Reza Rahadian</td>
-                                    <td class="px-6 py-4 font-medium">Rp 850.000</td>
-                                    <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold uppercase">Selesai</span></td>
-                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -207,30 +120,21 @@
                             <i class="fas fa-exclamation-triangle"></i> Peringatan Stok
                         </h3>
                         <div class="space-y-4">
-                            <!-- Item 1 -->
+                            @forelse($lowStockProducts as $product)
                             <div class="flex justify-between items-center pb-3 border-b border-gray-100">
                                 <div>
-                                    <h4 class="font-bold text-gray-900 text-sm">Ficus Lyrata</h4>
-                                    <p class="text-xs text-gray-500">Sisa 2 unit</p>
+                                    <h4 class="font-bold text-gray-900 text-sm">{{ $product->name }}</h4>
+                                    <p class="text-xs {{ $product->stock == 0 ? 'text-red-500' : 'text-gray-500' }}">
+                                        {{ $product->stock == 0 ? 'Habis' : 'Sisa ' . $product->stock . ' unit' }}
+                                    </p>
                                 </div>
-                                <button class="bg-black text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded hover:bg-gray-800 transition">Tambah</button>
+                                <a href="{{ route('products.edit', $product->id) }}" class="bg-black text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded hover:bg-gray-800 transition">Update</a>
                             </div>
-                            <!-- Item 2 -->
-                            <div class="flex justify-between items-center pb-3 border-b border-gray-100">
-                                <div>
-                                    <h4 class="font-bold text-gray-900 text-sm">Alocasia Polly</h4>
-                                    <p class="text-xs text-gray-500">Sisa 1 unit</p>
-                                </div>
-                                <button class="bg-black text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded hover:bg-gray-800 transition">Tambah</button>
+                            @empty
+                            <div class="text-center py-4">
+                                <p class="text-xs text-gray-500 italic">Semua stok aman.</p>
                             </div>
-                            <!-- Item 3 -->
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="font-bold text-gray-900 text-sm">Pot Terakota M</h4>
-                                    <p class="text-xs text-red-500 font-medium">Habis</p>
-                                </div>
-                                <button class="bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded hover:bg-brand-dark transition">Restock</button>
-                            </div>
+                            @endforelse
                         </div>
                     </div>
 
@@ -249,9 +153,4 @@
                 </div>
 
             </div>
-
-        </main>
-    </div>
-
-</body>
-</html>
+@endsection

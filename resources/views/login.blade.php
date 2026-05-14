@@ -48,12 +48,23 @@
             </p>
 
             <!-- Form Login -->
-            <form class="space-y-5">
+            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                @csrf
                 
+                @if ($errors->any())
+                    <div class="bg-red-50 text-red-500 p-4 rounded-md text-sm mb-4">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <!-- Input Email -->
                 <div>
                     <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-widest mb-2">Email</label>
-                    <input type="email" placeholder="contoh@email.com" class="w-full border border-gray-300 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" required>
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@email.com" class="w-full border border-gray-300 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" required>
                 </div>
                 
                 <!-- Input Password -->
@@ -62,11 +73,11 @@
                         <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-widest">Password</label>
                         <a href="javascript:void(0)" class="text-[10px] text-brand hover:text-brand-dark font-bold uppercase tracking-wider transition underline decoration-transparent hover:decoration-brand-dark">Lupa Password?</a>
                     </div>
-                    <input type="password" placeholder="********" class="w-full border border-gray-300 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" required>
+                    <input type="password" name="password" placeholder="********" class="w-full border border-gray-300 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" required>
                 </div>
                 
                 <!-- Tombol Masuk -->
-                <button type="button" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3.5 px-6 rounded-md transition uppercase text-sm tracking-wider shadow-md mt-4">
+                <button type="submit" class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3.5 px-6 rounded-md transition uppercase text-sm tracking-wider shadow-md mt-4">
                     Masuk
                 </button>
             </form>
@@ -74,7 +85,7 @@
             <!-- Bagian Daftar -->
             <div class="mt-8 text-center">
                 <p class="text-sm text-gray-500 mb-4">Belum punya akun?</p>
-                <a href="javascript:void(0)" class="block w-full text-center border-2 border-brand text-brand hover:bg-brand-light font-bold py-3 px-6 rounded-md transition uppercase text-xs tracking-widest">
+                <a href="{{ route('register') }}" class="block w-full text-center border-2 border-brand text-brand hover:bg-brand-light font-bold py-3 px-6 rounded-md transition uppercase text-xs tracking-widest">
                     Daftar Akun Baru
                 </a>
             </div>

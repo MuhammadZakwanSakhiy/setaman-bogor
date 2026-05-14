@@ -60,15 +60,15 @@
                     <div class="space-y-6">
                         <div>
                             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Nama Lengkap</p>
-                            <h2 class="text-xl font-bold text-gray-900">Budi Setiawan</h2>
+                            <h2 class="text-xl font-bold text-gray-900">{{ Auth::user()->name }}</h2>
                         </div>
                         <div>
                             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Alamat Email</p>
-                            <p class="text-base text-gray-700">budi.setiawan@example.com</p>
+                            <p class="text-base text-gray-700">{{ Auth::user()->email }}</p>
                         </div>
                         <div>
                             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">ID Pengguna</p>
-                            <p class="text-sm font-mono text-gray-500">#SB-2024-0089</p>
+                            <p class="text-sm font-mono text-gray-500">#SB-2026-{{ str_pad(Auth::id(), 4, '0', STR_PAD_LEFT) }}</p>
                         </div>
                     </div>
 
@@ -163,9 +163,12 @@
                         <h4 class="font-bold text-red-600 text-sm mb-1">Sesi Aktif</h4>
                         <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest">Masuk dari: Bogor, ID (Desktop)</p>
                     </div>
-                    <a href="{{ url('/login') }}" class="bg-white text-red-600 border border-red-200 hover:bg-red-100 font-bold py-2 px-6 rounded-md transition uppercase text-xs tracking-wider">
-                        Keluar Akun
-                    </a>
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="bg-white text-red-600 border border-red-200 hover:bg-red-100 font-bold py-2 px-6 rounded-md transition uppercase text-xs tracking-wider cursor-pointer">
+                            Keluar Akun
+                        </button>
+                    </form>
                 </div>
 
             </div>
