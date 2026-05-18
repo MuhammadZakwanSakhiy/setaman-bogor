@@ -8,14 +8,25 @@
         <h2 class="text-2xl font-bold text-gray-900 mb-1">KELOLA PRODUK</h2>
         <p class="text-sm text-gray-500">Daftar semua tanaman dan produk pendukung.</p>
     </div>
-    <a href="{{ route('products.create') }}" class="bg-brand text-white px-4 py-2 rounded-md font-bold text-sm uppercase tracking-wider hover:bg-brand-dark transition">
-        + Tambah Produk
-    </a>
+    <div class="flex gap-2">
+        <a href="{{ route('products.export') }}" class="bg-gray-100 text-gray-700 border border-gray-300 px-4 py-2 rounded-md font-bold text-sm uppercase tracking-wider hover:bg-gray-200 transition">
+            <i class="fas fa-file-export mr-2"></i> Export Data
+        </a>
+        <a href="{{ route('products.create') }}" class="bg-brand text-white px-4 py-2 rounded-md font-bold text-sm uppercase tracking-wider hover:bg-brand-dark transition">
+            + Tambah Produk
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
 <div class="mb-6 p-4 bg-green-100 border border-green-200 text-green-700 rounded-md">
     {{ session('success') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="mb-6 p-4 bg-red-100 border border-red-200 text-red-700 rounded-md">
+    {{ session('error') }}
 </div>
 @endif
 

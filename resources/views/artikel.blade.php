@@ -37,127 +37,40 @@
     <main class="container mx-auto px-6 pb-16 flex-grow">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             
-            <!-- Artikel 1 -->
+            @forelse($articles as $article)
             <article class="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col group">
-                
-                <!-- 1. LINK PADA GAMBAR -->
-                <a href="{{ url('/detail-artikel') }}" class="block h-56 bg-gray-100 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1589824781472-c5112e69888d?auto=format&fit=crop&w=600&q=80" alt="Propagasi Tanaman" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <a href="{{ route('artikel.show', $article->slug) }}" class="block h-56 bg-gray-100 overflow-hidden relative">
+                    <img src="{{ Str::startsWith($article->image_url, 'http') ? $article->image_url : asset('storage/' . $article->image_url) }}" alt="{{ $article->title }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
                 </a>
                 
                 <div class="p-6 flex-grow flex flex-col">
-                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori Panduan</span>
+                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori {{ $article->category->name ?? 'Umum' }}</span>
                     
-                    <!-- 2. LINK PADA JUDUL -->
-                    <a href="{{ url('/detail-artikel') }}" class="block hover:text-brand transition mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 leading-snug">Teknik Propagasi Tanaman Endemik Bogor</h2>
+                    <a href="{{ route('artikel.show', $article->slug) }}" class="block hover:text-brand transition mb-3">
+                        <h2 class="text-xl font-bold text-gray-900 leading-snug">{{ $article->title }}</h2>
                     </a>
                     
                     <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Pelajari metode paling efektif untuk memperbanyak tanaman khas Bogor dengan memperhatikan kelembaban...
+                        {{ Str::limit(strip_tags($article->content), 120) }}
                     </p>
                     
-                    <!-- 3. LINK PADA TEKS "BACA SELENGKAPNYA" -->
-                    <a href="{{ url('/detail-artikel') }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">
+                    <a href="{{ route('artikel.show', $article->slug) }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">
                         Baca Selengkapnya
                     </a>
                 </div>
             </article>
-
-            <!-- Artikel 2 -->
-            <article class="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col group">
-                <a href="{{ url('/detail-artikel') }}" class="block h-56 bg-gray-100 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80" alt="Arsitektur Modern" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                </a>
-                <div class="p-6 flex-grow flex flex-col">
-                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori Riset</span>
-                    <a href="{{ url('/detail-artikel') }}" class="block hover:text-brand transition mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 leading-snug">Manfaat Botani dalam Arsitektur Modern</h2>
-                    </a>
-                    <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Bagaimana integrasi tanaman dalam ruang tinggal dapat meningkatkan kualitas udara dan kesehatan mental penghuninya...
-                    </p>
-                    <a href="{{ url('/detail-artikel') }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">Baca Selengkapnya</a>
-                </div>
-            </article>
-
-            <!-- Artikel 3 -->
-            <article class="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col group">
-                <a href="{{ url('/detail-artikel') }}" class="block h-56 bg-gray-100 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1545241047-6083a36ee2bf?auto=format&fit=crop&w=600&q=80" alt="Tanaman Pencahayaan Rendah" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                </a>
-                <div class="p-6 flex-grow flex flex-col">
-                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori Katalog</span>
-                    <a href="{{ url('/detail-artikel') }}" class="block hover:text-brand transition mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 leading-snug">10 Tanaman Hias Terbaik untuk Pencahayaan Rendah</h2>
-                    </a>
-                    <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Daftar tanaman yang tetap subur meskipun diletakkan di sudut ruangan dengan akses cahaya matahari yang...
-                    </p>
-                    <a href="{{ url('/detail-artikel') }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">Baca Selengkapnya</a>
-                </div>
-            </article>
-
-            <!-- Artikel 4 -->
-            <article class="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col group">
-                <a href="{{ url('/detail-artikel') }}" class="block h-56 bg-gray-100 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e736?auto=format&fit=crop&w=600&q=80" alt="pH Tanah" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                </a>
-                <div class="p-6 flex-grow flex flex-col">
-                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori Tanah</span>
-                    <a href="{{ url('/detail-artikel') }}" class="block hover:text-brand transition mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 leading-snug">Memahami pH Tanah untuk Kebun Organik</h2>
-                    </a>
-                    <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Panduan mendalam mengenai cara menguji dan menyesuaikan tingkat keasaman tanah untuk memaksimalkan...
-                    </p>
-                    <a href="{{ url('/detail-artikel') }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">Baca Selengkapnya</a>
-                </div>
-            </article>
-
-            <!-- Artikel 5 -->
-            <article class="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col group">
-                <a href="{{ url('/detail-artikel') }}" class="block h-56 bg-gray-100 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1558904541-efa843a96f09?auto=format&fit=crop&w=600&q=80" alt="Taman Minimalis" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                </a>
-                <div class="p-6 flex-grow flex flex-col">
-                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori Lanskap</span>
-                    <a href="{{ url('/detail-artikel') }}" class="block hover:text-brand transition mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 leading-snug">Prinsip Desain Taman Minimalis Brutalis</h2>
-                    </a>
-                    <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Mengeksplorasi penggunaan beton, garis tegas, dan struktur tanaman arsitektural dalam menciptakan taman yang...
-                    </p>
-                    <a href="{{ url('/detail-artikel') }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">Baca Selengkapnya</a>
-                </div>
-            </article>
-
-            <!-- Artikel 6 -->
-            <article class="bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col group">
-                <a href="{{ url('/detail-artikel') }}" class="block h-56 bg-gray-100 overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1416879598555-220b3cb1a4bb?auto=format&fit=crop&w=600&q=80" alt="Irigasi Musim Hujan" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                </a>
-                <div class="p-6 flex-grow flex flex-col">
-                    <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori Perawatan</span>
-                    <a href="{{ url('/detail-artikel') }}" class="block hover:text-brand transition mb-3">
-                        <h2 class="text-xl font-bold text-gray-900 leading-snug">Manajemen Irigasi untuk Musim Penghujan</h2>
-                    </a>
-                    <p class="text-sm text-gray-600 leading-relaxed mb-6">
-                        Strategi khusus untuk mencegah pembusukan akar pada tanaman luar ruangan selama periode curah hujan tinggi...
-                    </p>
-                    <a href="{{ url('/detail-artikel') }}" class="mt-auto inline-block text-xs font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-0.5 w-max uppercase tracking-wider">Baca Selengkapnya</a>
-                </div>
-            </article>
+            @empty
+            <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12">
+                <i class="fas fa-newspaper text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">Belum ada artikel edukasi.</p>
+            </div>
+            @endforelse
 
         </div>
 
         <!-- Pagination -->
-        <div class="flex justify-center items-center space-x-2">
-            <button class="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-gray-500 hover:border-brand hover:text-brand transition text-sm rounded-sm"><i class="fas fa-chevron-left"></i></button>
-            <button class="w-8 h-8 flex items-center justify-center border border-brand bg-brand text-white text-sm font-semibold rounded-sm">1</button>
-            <button class="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-gray-700 hover:border-brand hover:text-brand transition text-sm font-semibold rounded-sm">2</button>
-            <button class="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-gray-700 hover:border-brand hover:text-brand transition text-sm font-semibold rounded-sm">3</button>
-            <button class="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-gray-500 hover:border-brand hover:text-brand transition text-sm rounded-sm"><i class="fas fa-chevron-right"></i></button>
+        <div class="flex justify-center mt-12">
+            {{ $articles->links() }}
         </div>
     </main>
 

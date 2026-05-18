@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mengenal Ekosistem Tanaman Endemik | Setaman Bogor</title>
+    <title>{{ $article->title }} | Setaman Bogor</title>
     <!-- Tailwind CSS CDN -->
     
     <!-- Font Awesome for Icons -->
@@ -19,7 +19,8 @@
     <!-- Breadcrumb -->
     <div class="container mx-auto px-6 py-6 text-sm text-gray-500">
         <a href="{{ url('/artikel') }}" class="hover:text-brand">Edukasi</a> <span class="mx-2">/</span>
-        <span class="text-gray-800 font-medium">Artikel</span>
+        <a href="{{ url('/artikel') }}?category={{ $article->category->name ?? 'umum' }}" class="hover:text-brand">{{ $article->category->name ?? 'Umum' }}</a> <span class="mx-2">/</span>
+        <span class="text-gray-800 font-medium">{{ $article->title }}</span>
     </div>
 
     <!-- Article Content -->
@@ -27,7 +28,7 @@
         
         <!-- Hero Image -->
         <div class="w-full max-w-5xl mx-auto h-[300px] md:h-[500px] bg-gray-100 rounded-2xl overflow-hidden mb-12">
-            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1200&q=80" alt="Hutan Tropis" class="w-full h-full object-cover">
+            <img src="{{ Str::startsWith($article->image_url, 'http') ? $article->image_url : asset('storage/' . $article->image_url) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
         </div>
 
         <!-- Article Body -->
@@ -35,43 +36,18 @@
             
             <!-- Header Artikel -->
             <header class="mb-10 text-center md:text-left">
-                <span class="text-xs font-bold text-brand uppercase tracking-widest mb-3 block">Edukasi & Botani</span>
-                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">Mengenal Ekosistem Tanaman Endemik di Kawasan Bogor Utara</h1>
+                <span class="text-xs font-bold text-brand uppercase tracking-widest mb-3 block">Edukasi & {{ $article->category->name ?? 'Botani' }}</span>
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">{{ $article->title }}</h1>
                 <div class="text-xs text-gray-400 uppercase tracking-widest font-semibold flex flex-wrap justify-center md:justify-start gap-2">
-                    <span>Diunggah: 12 Oktober 2023</span>
+                    <span>Diunggah: {{ $article->created_at->translatedFormat('d F Y') }}</span>
                     <span>&bull;</span>
-                    <span>Oleh: Tim Arsitektur Botani</span>
+                    <span>Oleh: {{ $article->author->name ?? 'Tim Setaman Bogor' }}</span>
                 </div>
             </header>
 
             <!-- Teks Artikel -->
             <div class="prose prose-lg text-gray-700 leading-relaxed space-y-6">
-                <p>
-                    Bogor telah lama dikenal sebagai kota hujan dengan keanekaragaman hayati yang luar biasa. Dalam upaya pelestarian botani lokal, Setaman Bogor berkomitmen untuk mendokumentasikan dan membagikan pengetahuan mengenai spesies tanaman yang memiliki nilai historis dan ekologis di wilayah ini.
-                </p>
-                <p>
-                    Kondisi tanah yang lembap dan curah hujan yang tinggi menciptakan mikroklimat unik. Tanaman seperti berbagai jenis pakis, talas-talasan (Araceae), hingga pohon-pohon peneduh besar tumbuh subur tanpa memerlukan intervensi manusia yang berlebihan. Namun, dengan perkembangan urbanisasi, keberadaan mereka mulai terpinggirkan.
-                </p>
-
-                <!-- Blockquote -->
-                <blockquote class="border-l-4 border-brand pl-6 py-2 my-10 bg-brand-light/30 rounded-r-lg">
-                    <p class="text-xl md:text-2xl italic text-brand-dark font-medium leading-snug m-0">
-                        "Menanam bukan hanya soal estetika, melainkan menjaga kesinambungan ekologis yang telah ada selama berabad-abad."
-                    </p>
-                </blockquote>
-
-                <p>
-                    Langkah pertama dalam memulai taman botani pribadi adalah memahami karakteristik tanaman endemik. Tanaman lokal cenderung lebih tahan terhadap hama lokal dan tidak membutuhkan pupuk kimia dalam jumlah besar. Ini adalah prinsip dasar dari arsitektur botani yang berkelanjutan.
-                </p>
-
-                <!-- Inline Image Placeholder -->
-                <div class="my-10 h-64 md:h-96 bg-gray-100 rounded-xl overflow-hidden">
-                     <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e736?auto=format&fit=crop&w=800&q=80" alt="Ilustrasi Tanah Botani" class="w-full h-full object-cover">
-                </div>
-
-                <p>
-                    Dalam katalog kami, Anda dapat menemukan berbagai jenis tanaman yang telah kami seleksi berdasarkan kemudahannya untuk dirawat di lingkungan rumah tinggal. Kami percaya bahwa setiap rumah di Bogor seharusnya memiliki setidaknya satu tanaman endemik untuk mendukung penyerapan air tanah dan menjaga kualitas udara.
-                </p>
+                {!! $article->content !!}
             </div>
             
         </article>

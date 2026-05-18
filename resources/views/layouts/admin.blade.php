@@ -32,6 +32,10 @@
                 <i class="fas fa-box w-5 text-center"></i>
                 Kelola Produk
             </a>
+            <a href="{{ url('/admin/categories') }}" class="flex items-center gap-3 px-6 py-3 {{ request()->is('admin/categories*') ? 'bg-brand text-white font-semibold' : 'text-gray-600 hover:bg-brand-light hover:text-brand font-medium' }} text-sm transition">
+                <i class="fas fa-tags w-5 text-center"></i>
+                Kelola Kategori
+            </a>
             <a href="{{ url('/admin/articles') }}" class="flex items-center gap-3 px-6 py-3 {{ request()->is('admin/articles*') ? 'bg-brand text-white font-semibold' : 'text-gray-600 hover:bg-brand-light hover:text-brand font-medium' }} text-sm transition">
                 <i class="fas fa-newspaper w-5 text-center"></i>
                 Kelola Artikel
@@ -39,6 +43,14 @@
             <a href="{{ url('/admin/orders') }}" class="flex items-center gap-3 px-6 py-3 {{ request()->is('admin/orders*') ? 'bg-brand text-white font-semibold' : 'text-gray-600 hover:bg-brand-light hover:text-brand font-medium' }} text-sm transition">
                 <i class="fas fa-shopping-cart w-5 text-center"></i>
                 Kelola Pesanan
+            </a>
+            <a href="{{ url('/admin/users') }}" class="flex items-center gap-3 px-6 py-3 {{ request()->is('admin/users*') ? 'bg-brand text-white font-semibold' : 'text-gray-600 hover:bg-brand-light hover:text-brand font-medium' }} text-sm transition">
+                <i class="fas fa-users w-5 text-center"></i>
+                Manajemen User
+            </a>
+            <a href="{{ url('/admin/settings') }}" class="flex items-center gap-3 px-6 py-3 {{ request()->is('admin/settings*') ? 'bg-brand text-white font-semibold' : 'text-gray-600 hover:bg-brand-light hover:text-brand font-medium' }} text-sm transition">
+                <i class="fas fa-cog w-5 text-center"></i>
+                Pengaturan
             </a>
         </nav>
 

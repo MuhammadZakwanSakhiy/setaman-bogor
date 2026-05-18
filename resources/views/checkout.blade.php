@@ -26,6 +26,17 @@
         <div class="grid gap-8 lg:grid-cols-[1fr_380px]">
             <form id="checkoutForm" action="{{ route('checkout.store') }}" method="POST" class="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
                 @csrf
+                
+                @if ($errors->any())
+                    <div class="bg-red-50 text-red-500 p-4 rounded-md text-sm mb-6">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <div class="grid gap-5 md:grid-cols-2">
                     <label class="grid gap-2 text-sm font-semibold text-brand-dark">
                         Nama Pembeli

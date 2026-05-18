@@ -20,11 +20,27 @@
     <main class="container mx-auto px-6 py-12 flex-grow">
         
         <!-- Header Profil -->
-        <div class="mb-10">
+        <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-900 inline-block border-b-4 border-gray-900 pb-2 uppercase tracking-wide">
                 Profil Pengguna
             </h1>
         </div>
+
+        @if (session('success'))
+            <div class="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md mb-6 text-sm font-medium">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="bg-red-50 text-red-500 p-4 rounded-md text-sm mb-6">
+                <ul class="list-disc pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="flex flex-col lg:flex-row gap-8">
             
@@ -41,30 +57,24 @@
                     </div>
 
                     <!-- Info User -->
-                    <div class="space-y-6">
+                    <form action="{{ route('profile.update') }}" method="POST" class="space-y-4">
+                        @csrf
                         <div>
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Nama Lengkap</p>
-                            <h2 class="text-xl font-bold text-gray-900">{{ Auth::user()->name }}</h2>
+                            <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Nama Lengkap</label>
+                            <input type="text" name="name" value="{{ Auth::user()->name }}" class="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-brand font-bold text-gray-900" required>
                         </div>
                         <div>
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Alamat Email</p>
-                            <p class="text-base text-gray-700">{{ Auth::user()->email }}</p>
+                            <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Alamat Email</label>
+                            <input type="email" value="{{ Auth::user()->email }}" class="w-full border-b border-gray-300 py-2 text-gray-500 bg-gray-50 cursor-not-allowed" disabled>
                         </div>
                         <div>
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">ID Pengguna</p>
-                            <p class="text-sm font-mono text-gray-500">#SB-2026-{{ str_pad(Auth::id(), 4, '0', STR_PAD_LEFT) }}</p>
+                            <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Nomor WhatsApp</label>
+                            <input type="tel" name="phone" value="{{ Auth::user()->phone }}" class="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-brand text-gray-700">
                         </div>
-                    </div>
-
-                    <!-- Tombol Aksi -->
-                    <div class="mt-8 space-y-3">
-                        <button class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider shadow-sm">
-                            Edit Profil
+                        <button type="submit" class="w-full mt-4 bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider shadow-sm">
+                            Simpan Perubahan Profil
                         </button>
-                        <button class="w-full bg-white border border-gray-300 hover:border-brand hover:text-brand text-gray-700 font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider">
-                            Ganti Kata Sandi
-                        </button>
-                    </div>
+                    </form>
 
                 </div>
             </div>
@@ -99,43 +109,42 @@
                     </div>
                 </div>
 
-                <!-- Row: Kontribusi & Pengaturan -->
+                <!-- Row: Pengaturan & Ganti Password -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
-                    <!-- Kontribusi -->
-                    <div class="bg-brand-light border border-green-100 p-6 lg:p-8 rounded-xl shadow-sm flex flex-col">
-                        <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-6">Kontribusi</h3>
-                        <div class="grid grid-cols-2 gap-4 mt-auto">
-                            <div class="bg-white border border-gray-200 p-4 rounded-lg text-center flex flex-col justify-center">
-                                <span class="text-3xl font-bold text-brand-dark leading-none mb-2">12</span>
-                                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tanaman</span>
+                    <!-- Ganti Password -->
+                    <div class="bg-white border border-gray-200 p-6 lg:p-8 rounded-xl shadow-sm flex flex-col">
+                        <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-6">Ganti Password</h3>
+                        <form action="{{ route('profile.password') }}" method="POST" class="space-y-4">
+                            @csrf
+                            <div>
+                                <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Password Lama</label>
+                                <input type="password" name="current_password" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-brand" required>
                             </div>
-                            <div class="bg-white border border-gray-200 p-4 rounded-lg text-center flex flex-col justify-center">
-                                <span class="text-3xl font-bold text-brand-dark leading-none mb-2">05</span>
-                                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Artikel</span>
+                            <div>
+                                <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Password Baru</label>
+                                <input type="password" name="password" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-brand" required minlength="8">
                             </div>
-                        </div>
+                            <div>
+                                <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Konfirmasi Password Baru</label>
+                                <input type="password" name="password_confirmation" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-brand" required minlength="8">
+                            </div>
+                            <button type="submit" class="w-full mt-2 bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-4 rounded-md transition uppercase text-xs tracking-wider shadow-sm">
+                                Update Password
+                            </button>
+                        </form>
                     </div>
 
                     <!-- Pengaturan -->
                     <div class="bg-white border border-gray-200 p-6 lg:p-8 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-6">Pengaturan</h3>
+                        <h3 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-6">Pintasan</h3>
                         <div class="space-y-4">
-                            <!-- Toggle 1 -->
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" checked class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand focus:ring-2 cursor-pointer">
-                                <span class="text-xs font-bold text-gray-700 uppercase tracking-wider group-hover:text-brand transition">Notifikasi Email</span>
-                            </label>
-                            <!-- Toggle 2 -->
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand focus:ring-2 cursor-pointer">
-                                <span class="text-xs font-bold text-gray-700 uppercase tracking-wider group-hover:text-brand transition">Mode Gelap</span>
-                            </label>
-                            <!-- Toggle 3 -->
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" checked class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand focus:ring-2 cursor-pointer">
-                                <span class="text-xs font-bold text-gray-700 uppercase tracking-wider group-hover:text-brand transition">Profil Publik</span>
-                            </label>
+                            <a href="{{ route('profile.orders') }}" class="block w-full text-center bg-brand-light text-brand hover:bg-brand hover:text-white font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider border border-brand">
+                                Lihat Riwayat Pesanan
+                            </a>
+                            <a href="{{ route('katalog') }}" class="block w-full text-center bg-white border border-gray-300 hover:border-brand hover:text-brand text-gray-700 font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider">
+                                Belanja Lagi
+                            </a>
                         </div>
                     </div>
 

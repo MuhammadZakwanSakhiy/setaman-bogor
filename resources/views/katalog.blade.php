@@ -49,6 +49,15 @@
             <div class="bg-white border border-gray-100 shadow-sm hover:shadow-md transition rounded-xl flex flex-col overflow-hidden">
                 <a href="{{ route('katalog.show', $product->slug) }}" class="h-64 bg-gray-100 flex items-center justify-center relative group block cursor-pointer">
                     <img src="{{ Str::startsWith($product->image_url, 'http') ? $product->image_url : asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
+                    @if($product->stock == 0)
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <span class="bg-red-600 text-white font-bold px-4 py-2 rounded-sm text-sm uppercase tracking-wider">Habis</span>
+                        </div>
+                    @elseif($product->stock < 5)
+                        <div class="absolute top-4 left-4 bg-orange-500 text-white font-bold px-3 py-1 text-xs uppercase tracking-wider rounded-sm shadow-sm">
+                            Stok Terbatas
+                        </div>
+                    @endif
                 </a>
                 
                 <div class="p-6 flex-grow flex flex-col justify-between">
@@ -68,7 +77,11 @@
                         <form action="{{ url('/cart/add') }}" method="POST" class="inline">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <button type="submit" class="bg-brand text-white text-xs font-semibold uppercase tracking-wider px-6 py-2 hover:bg-brand-dark transition rounded-md">Tambah</button>
+                            @if($product->stock > 0)
+                                <button type="submit" class="bg-brand text-white text-xs font-semibold uppercase tracking-wider px-6 py-2 hover:bg-brand-dark transition rounded-md">Tambah</button>
+                            @else
+                                <button type="button" disabled class="bg-gray-300 text-gray-500 text-xs font-semibold uppercase tracking-wider px-6 py-2 rounded-md cursor-not-allowed">Habis</button>
+                            @endif
                         </form>
                     </div>
                 </div>

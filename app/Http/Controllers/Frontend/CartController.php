@@ -27,6 +27,7 @@ class CartController extends Controller
             'action' => 'nullable|string'
         ]);
 
+        $product = Product::findOrFail($request->product_id);
         $cart = Cart::firstOrCreate([
             'user_id' => auth()->id()
         ]);
@@ -36,6 +37,12 @@ class CartController extends Controller
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('product_id', $request->product_id)
             ->first();
+
+        $currentQty = $cartItem ? $cartItem->quantity : 0;
+        
+        if (($currentQty + $quantity) > $product->stock) {
+            return back()->with('error', 'Stok tidak mencukupi. Sisa stok: ' . $product->stock);
+        }
 
         if ($cartItem) {
             $cartItem->update([
@@ -67,6 +74,9 @@ class CartController extends Controller
         
         if ($item->cart->user_id === auth()->id()) {
             if ($request->action == 'increment') {
+                if ($item->quantity + 1 > $item->product->stock) {
+                    return back()->with('error', 'Stok tidak mencukupi.');
+                }
                 $item->increment('quantity');
             } else {
                 if ($item->quantity > 1) {

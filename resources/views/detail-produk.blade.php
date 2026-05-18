@@ -44,8 +44,14 @@
                     <p class="text-2xl font-bold text-brand-dark mb-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                     
                     <div class="flex items-center gap-2 text-sm text-gray-700 font-medium">
-                        <div class="w-2.5 h-2.5 rounded-full {{ $product->stock > 0 ? 'bg-green-500' : 'bg-red-500' }}"></div>
-                        {{ $product->stock > 0 ? 'Tersedia (' . $product->stock . ' Unit)' : 'Stok Habis' }}
+                        <div class="w-2.5 h-2.5 rounded-full {{ $product->stock > 0 ? ($product->stock < 5 ? 'bg-orange-500' : 'bg-green-500') : 'bg-red-500' }}"></div>
+                        @if($product->stock == 0)
+                            Stok Habis
+                        @elseif($product->stock < 5)
+                            Stok Terbatas (Tersisa {{ $product->stock }})
+                        @else
+                            Tersedia ({{ $product->stock }} Unit)
+                        @endif
                     </div>
                 </div>
 
@@ -80,12 +86,18 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="flex flex-col sm:flex-row gap-4 mb-4">
-                            <button type="submit" name="action" value="cart" class="flex-1 border-2 border-brand text-brand hover:bg-brand-light font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider">
-                                Tambah ke Keranjang
-                            </button>
-                            <button type="submit" name="action" value="checkout" class="flex-1 bg-brand text-white hover:bg-brand-dark font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider shadow-md">
-                                Beli Sekarang
-                            </button>
+                            @if($product->stock > 0)
+                                <button type="submit" name="action" value="cart" class="flex-1 border-2 border-brand text-brand hover:bg-brand-light font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider">
+                                    Tambah ke Keranjang
+                                </button>
+                                <button type="submit" name="action" value="checkout" class="flex-1 bg-brand text-white hover:bg-brand-dark font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider shadow-md">
+                                    Beli Sekarang
+                                </button>
+                            @else
+                                <button type="button" disabled class="w-full bg-gray-300 text-gray-500 cursor-not-allowed font-bold py-3 px-6 rounded-md uppercase text-sm tracking-wider">
+                                    Stok Habis
+                                </button>
+                            @endif
                         </div>
                     </form>
                     

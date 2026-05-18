@@ -39,6 +39,9 @@ class CheckoutController extends Controller
 
         $subtotal = 0;
         foreach ($cart->items as $item) {
+            if ($item->quantity > $item->product->stock) {
+                return redirect()->route('cart.index')->with('error', 'Maaf, stok ' . $item->product->name . ' tidak mencukupi (sisa ' . $item->product->stock . ').');
+            }
             $subtotal += $item->product->price * $item->quantity;
         }
 
@@ -77,7 +80,7 @@ class CheckoutController extends Controller
         }
 
         // Generate WA message
-        $waNumber = '62895321313124';
+        $waNumber = \App\Models\Setting::where('key', 'wa_number')->value('value') ?? '62895321313124';
         
         $message = "Saya " . $orderCode . " : " . $order->customer_name . " ingin memesan produk:\n\n";
         $message .= $productListStr . "\n";
@@ -92,6 +95,11 @@ class CheckoutController extends Controller
         // Clear cart
         $cart->items()->delete();
         $cart->delete();
+
+        // Update product stock
+        foreach ($cart->items as $item) {
+            $item->product->decrement('stock', $item->quantity);
+        }
 
         $waLink = "https://api.whatsapp.com/send?phone=" . $waNumber . "&text=" . urlencode($message);
 
