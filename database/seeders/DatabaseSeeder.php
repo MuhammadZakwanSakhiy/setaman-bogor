@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
         // Seed initial article categories
         $this->call(\Database\Seeders\ArticleCategorySeeder::class);
 
+        // Seed products and categories
+        $this->call([
+            \Database\Seeders\CategorySeeder::class,
+            \Database\Seeders\ProductSeeder::class,
+        ]);
+
                 User::firstOrCreate([
             'name' => 'Admin Setaman',
             'email' => 'admin@setaman.com',

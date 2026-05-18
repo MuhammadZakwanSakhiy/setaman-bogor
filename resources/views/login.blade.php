@@ -16,17 +16,7 @@
 
     <!-- Minimal Navbar -->
     <!-- Untuk halaman login, biasanya menu lain dihilangkan agar user fokus login -->
-    <nav class="bg-white border-b border-gray-100">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="{{ url('/') }}" class="flex items-center gap-2">
-                <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-10 w-auto md:h-12">
-                <div class="text-xl md:text-2xl font-bold text-brand-dark">Setaman Bogor</div>
-            </a>
-            <a href="{{ url('/') }}" class="text-sm font-semibold text-gray-500 hover:text-brand transition flex items-center gap-2">
-                <i class="fas fa-arrow-left"></i> Kembali
-            </a>
-        </div>
-    </nav>
+    <x-navbar />
 
     <!-- Main Content: Login Box -->
     <main class="flex-grow flex items-center justify-center p-6">

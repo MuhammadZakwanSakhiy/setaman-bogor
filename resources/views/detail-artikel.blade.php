@@ -14,22 +14,7 @@
 </head>
 <body class="bg-white text-gray-800">
 
-    <!-- Navbar -->
-    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2 flex-1">
-            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
-            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
-        </div>
-        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
-            <a href="{{ url('/') }}" class="text-gray-500 hover:text-brand transition">Beranda</a>
-            <a href="{{ url('/katalog') }}" class="text-gray-500 hover:text-brand transition">Katalog</a>
-            <a href="{{ url('/artikel') }}" class="text-brand border-b-2 border-brand pb-1">Edukasi</a>
-        </div>
-        <div class="flex space-x-4 text-gray-600 flex-1 justify-end">
-            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition"><i class="fas fa-shopping-cart"></i></a>
-            <a href="{{ url('/login') }}" class="hover:text-brand transition"><i class="fas fa-user"></i></a>
-        </div>
-    </nav>
+    <x-navbar />
 
     <!-- Breadcrumb -->
     <div class="container mx-auto px-6 py-6 text-sm text-gray-500">

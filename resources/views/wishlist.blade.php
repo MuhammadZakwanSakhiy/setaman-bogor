@@ -14,119 +14,68 @@
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Navbar -->
-    <nav class="bg-white container mx-auto px-6 py-4 flex justify-between items-center border-b border-gray-100">
-        <div class="flex items-center gap-2 flex-1">
-            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
-            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
-        </div>
-        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
-            <a href="{{ url('/') }}" class="text-gray-500 hover:text-brand transition">Beranda</a>
-            <a href="{{ url('/katalog') }}" class="text-gray-500 hover:text-brand transition">Katalog</a>
-            <a href="{{ url('/artikel') }}" class="text-gray-500 hover:text-brand transition">Edukasi</a>
-        </div>
-        <div class="flex space-x-4 text-gray-600 flex-1 justify-end">
-            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition"><i class="fas fa-shopping-cart"></i></a>
-            <!-- Ikon User Aktif (karena Wishlist biasanya bagian dari profil/akun) -->
-            <a href="{{ url('/profil') }}" class="text-brand transition"><i class="fas fa-user"></i></a>
-        </div>
-    </nav>
+    <x-navbar />
 
     <!-- Main Content: Wishlist -->
     <main class="container mx-auto px-6 py-12 flex-grow">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-8">Wishlist Anda</h1>
 
         <!-- Daftar Wishlist (Full Width) -->
-        <div class="flex flex-col gap-6 mb-16">
-            
-            <!-- [AWAL LOOPING PHP DARI DATABASE DI SINI NANTINYA] -->
-
-            <!-- Item Wishlist 1 -->
-            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
-                <!-- Gambar -->
-                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" alt="Monstera Deliciosa" class="w-full h-full object-cover">
+            @if(session('success'))
+                <div class="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md mb-4 text-sm font-medium">
+                    {{ session('success') }}
                 </div>
-                
-                <!-- Info Produk -->
-                <div class="flex-grow flex flex-col justify-center">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Outdoor / Botanical</span>
-                    <a href="{{ url('/detail-produk') }}" class="hover:text-brand transition">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Monstera Deliciosa</h3>
-                    </a>
-                    <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp 250.000</p>
-                </div>
+            @endif
 
-                <!-- Aksi: Kuantitas & Hapus -->
-                <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
-                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                        <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">-</button>
-                        <input type="text" value="1" class="w-10 text-center text-sm font-semibold text-gray-900 focus:outline-none border-x border-gray-300 py-1" readonly>
-                        <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">+</button>
+            @if(session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md mb-4 text-sm font-medium">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if($wishlist && $wishlist->items->count() > 0)
+                @foreach($wishlist->items as $item)
+                <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
+                    <!-- Gambar -->
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 relative">
+                        <a href="{{ route('katalog.show', $item->product->slug) }}" class="block w-full h-full">
+                            <img src="{{ Str::startsWith($item->product->image_url, 'http') ? $item->product->image_url : asset('storage/' . $item->product->image_url) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                        </a>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <button class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
-                        <!-- Tambahan tombol opsional untuk memudahkan user langsung beli -->
-                        <button class="bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-md hover:bg-brand-dark transition shadow-sm hidden sm:block">Tambah ke Keranjang</button>
+                    
+                    <!-- Info Produk -->
+                    <div class="flex-grow flex flex-col justify-center">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">{{ $item->product->category->name }}</span>
+                        <a href="{{ route('katalog.show', $item->product->slug) }}" class="hover:text-brand transition">
+                            <h3 class="text-lg font-bold text-gray-900 mb-1">{{ $item->product->name }}</h3>
+                        </a>
+                        <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp {{ number_format($item->product->price, 0, ',', '.') }}</p>
                     </div>
-                </div>
-            </div>
 
-            <!-- Item Wishlist 2 -->
-            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
-                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1603436326446-7dc41f021c7a?auto=format&fit=crop&w=300&q=80" alt="Ficus Lyrata" class="w-full h-full object-cover">
-                </div>
-                
-                <div class="flex-grow flex flex-col justify-center">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Indoor / Air Purifying</span>
-                    <a href="{{ url('/detail-produk') }}" class="hover:text-brand transition">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Ficus Lyrata</h3>
-                    </a>
-                    <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp 175.000</p>
-                </div>
-
-                <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
-                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                        <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">-</button>
-                        <input type="text" value="2" class="w-10 text-center text-sm font-semibold text-gray-900 focus:outline-none border-x border-gray-300 py-1" readonly>
-                        <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">+</button>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <button class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
-                        <button class="bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-md hover:bg-brand-dark transition shadow-sm hidden sm:block">Tambah ke Keranjang</button>
+                    <!-- Aksi -->
+                    <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
+                        <div class="flex items-center gap-4 mt-auto">
+                            <form action="{{ route('wishlist.remove') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="item_id" value="{{ $item->id }}">
+                                <button type="submit" class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
+                            </form>
+                            <form action="{{ url('/cart/add') }}" method="POST" class="hidden sm:block">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $item->product_id }}">
+                                <button type="submit" class="bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-md hover:bg-brand-dark transition shadow-sm">Tambah ke Keranjang</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Item Wishlist 3 (Sesuai wireframe, diduplikasi) -->
-            <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
-                <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                    <img src="https://images.unsplash.com/photo-1596547609652-9cb5d8d736bb?auto=format&fit=crop&w=300&q=80" alt="Aloe Barbadensis" class="w-full h-full object-cover">
+                @endforeach
+            @else
+                <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
+                    <i class="far fa-heart text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg mb-4">Wishlist Anda masih kosong.</p>
+                    <a href="{{ route('katalog') }}" class="bg-brand text-white font-bold py-2 px-6 rounded-md hover:bg-brand-dark transition uppercase text-sm tracking-wider">Mulai Belanja</a>
                 </div>
-                
-                <div class="flex-grow flex flex-col justify-center">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Indoor / Air Purifying</span>
-                    <a href="{{ url('/detail-produk') }}" class="hover:text-brand transition">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Aloe Barbadensis</h3>
-                    </a>
-                    <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp 175.000</p>
-                </div>
-
-                <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
-                    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                        <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">-</button>
-                        <input type="text" value="2" class="w-10 text-center text-sm font-semibold text-gray-900 focus:outline-none border-x border-gray-300 py-1" readonly>
-                        <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">+</button>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <button class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
-                        <button class="bg-brand text-white text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-md hover:bg-brand-dark transition shadow-sm hidden sm:block">Tambah ke Keranjang</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- [AKHIR LOOPING PHP DARI DATABASE DI SINI] -->
+            @endif
 
         </div>
 

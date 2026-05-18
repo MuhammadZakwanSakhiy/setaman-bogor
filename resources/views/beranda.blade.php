@@ -14,41 +14,7 @@
 </head>
 <body class="bg-white text-gray-800">
 
-    <!-- Navbar -->
-    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-        
-        <!-- Bagian Kiri: Logo -->
-        <div class="flex items-center gap-2 flex-1">
-            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
-            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
-        </div>
-
-        <!-- Bagian Tengah: Menu -->
-        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
-            <a href="{{ url('/') }}" class="text-brand border-b-2 border-brand pb-1">Beranda</a>
-            <a href="{{ url('/katalog') }}" class="text-gray-500 hover:text-brand transition">Katalog</a>
-            <a href="{{ url('/artikel') }}" class="text-gray-500 hover:text-brand transition">Edukasi</a>
-        </div>
-
-        <!-- Bagian Kanan: Ikon -->
-        <div class="flex space-x-4 text-gray-600 flex-1 justify-end items-center">
-            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition"><i class="fas fa-shopping-cart"></i></a>
-            @auth
-                @if(Auth::user()->role === 'admin')
-                    <a href="{{ url('/admin/dashboard') }}" class="hover:text-brand transition" title="Dashboard Admin"><i class="fas fa-chart-line text-brand"></i></a>
-                @else
-                    <a href="{{ url('/profil') }}" class="hover:text-brand transition" title="Profil Saya"><i class="fas fa-user-circle text-brand text-lg"></i></a>
-                @endif
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                    @csrf
-                    <button type="submit" class="hover:text-red-500 transition cursor-pointer" title="Keluar"><i class="fas fa-sign-out-alt"></i></button>
-                </form>
-            @else
-                <a href="{{ route('login') }}" class="hover:text-brand transition"><i class="fas fa-user"></i></a>
-            @endauth
-        </div>
-
-    </nav>
+    <x-navbar />
 
     <!-- Hero Section -->
     <section class="container mx-auto px-6 py-12 md:py-20 flex flex-col-reverse md:flex-row items-center gap-12">

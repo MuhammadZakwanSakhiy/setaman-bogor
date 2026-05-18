@@ -15,27 +15,13 @@
 <body class="bg-gray-50 text-gray-800">
 
     <!-- Navbar (Sama dengan halaman lain) -->
-    <nav class="bg-white container mx-auto px-6 py-4 flex justify-between items-center border-b border-gray-100">
-        <div class="flex items-center gap-2 flex-1">
-            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
-            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
-        </div>
-        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
-            <a href="{{ url('/') }}" class="text-gray-500 hover:text-brand transition">Beranda</a>
-            <a href="{{ url('/katalog') }}" class="text-brand border-b-2 border-brand pb-1">Katalog</a>
-            <a href="{{ url('/artikel') }}" class="text-gray-500 hover:text-brand transition">Edukasi</a>
-        </div>
-        <div class="flex space-x-4 text-gray-600 flex-1 justify-end">
-            <a href="{{ url('/keranjang') }}" class="hover:text-brand"><i class="fas fa-shopping-cart"></i></a>
-            <a href="{{ url('/login') }}" class="hover:text-brand transition"><i class="fas fa-user"></i></a>
-        </div>
-    </nav>
+    <x-navbar />
 
-    <!-- Breadcrumb (Opsional, sangat disarankan untuk navigasi e-commerce) -->
+    <!-- Breadcrumb -->
     <div class="container mx-auto px-6 py-4 text-sm text-gray-500">
-        <a href="{{ url('/katalog') }}" class="hover:text-brand">Katalog</a> <span class="mx-2">/</span>
-        <a href="javascript:void(0)" class="hover:text-brand">Tanaman Indoor</a> <span class="mx-2">/</span>
-        <span class="text-gray-800 font-medium">Monstera Deliciosa</span>
+        <a href="{{ route('katalog') }}" class="hover:text-brand">Katalog</a> <span class="mx-2">/</span>
+        <a href="{{ route('katalog', ['category' => $product->category->slug ?? $product->category->name]) }}" class="hover:text-brand">{{ $product->category->name }}</a> <span class="mx-2">/</span>
+        <span class="text-gray-800 font-medium">{{ $product->name }}</span>
     </div>
 
     <!-- Product Detail Section -->
@@ -46,35 +32,20 @@
             <div class="flex flex-col gap-4">
                 <!-- Main Image -->
                 <div class="w-full h-[400px] md:h-[500px] bg-gray-100 rounded-xl overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=800&q=80" alt="Monstera Deliciosa Utama" class="w-full h-full object-cover">
-                </div>
-                <!-- Thumbnails Grid -->
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="h-20 md:h-24 bg-gray-100 rounded-lg overflow-hidden border-2 border-brand cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" alt="Thumbnail 1" class="w-full h-full object-cover">
-                    </div>
-                    <div class="h-20 md:h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 cursor-pointer opacity-70 hover:opacity-100 transition">
-                        <img src="https://images.unsplash.com/photo-1545241047-6083a36ee2bf?auto=format&fit=crop&w=300&q=80" alt="Thumbnail 2" class="w-full h-full object-cover">
-                    </div>
-                    <div class="h-20 md:h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 cursor-pointer opacity-70 hover:opacity-100 transition">
-                        <img src="https://images.unsplash.com/photo-1600354143496-e26b801a61e7?auto=format&fit=crop&w=300&q=80" alt="Thumbnail 3" class="w-full h-full object-cover">
-                    </div>
-                    <div class="h-20 md:h-24 bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center text-gray-400 cursor-pointer hover:bg-gray-50 transition">
-                        <i class="fas fa-play-circle text-2xl"></i>
-                    </div>
+                    <img src="{{ Str::startsWith($product->image_url, 'http') ? $product->image_url : asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                 </div>
             </div>
 
             <!-- Right Column: Product Info -->
             <div class="flex flex-col">
                 <div class="mb-4">
-                    <span class="inline-block border border-gray-800 text-gray-800 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-sm mb-4">Tanaman Indoor</span>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">Monstera Deliciosa</h1>
-                    <p class="text-2xl font-bold text-brand-dark mb-4">Rp 250.000</p>
+                    <span class="inline-block border border-gray-800 text-gray-800 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-sm mb-4">{{ $product->category->name }}</span>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ $product->name }}</h1>
+                    <p class="text-2xl font-bold text-brand-dark mb-4">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                     
                     <div class="flex items-center gap-2 text-sm text-gray-700 font-medium">
-                        <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
-                        Tersedia (12 Unit)
+                        <div class="w-2.5 h-2.5 rounded-full {{ $product->stock > 0 ? 'bg-green-500' : 'bg-red-500' }}"></div>
+                        {{ $product->stock > 0 ? 'Tersedia (' . $product->stock . ' Unit)' : 'Stok Habis' }}
                     </div>
                 </div>
 
@@ -83,43 +54,48 @@
                 <!-- Description -->
                 <div class="mb-6">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3">Deskripsi</h3>
-                    <p class="text-gray-600 leading-relaxed text-sm">
-                        Tanaman ikonik dengan daun berlubang unik yang memberikan kesan tropis modern pada ruangan Anda. Mudah dirawat dan cocok untuk pemula yang ingin menghadirkan nuansa alam ke dalam rumah.
-                    </p>
+                    <p class="text-gray-600 leading-relaxed text-sm whitespace-pre-line">{{ $product->description }}</p>
                 </div>
 
                 <!-- Care Tips Box -->
+                @if($product->care_tips)
                 <div class="bg-brand-light p-5 rounded-xl border border-green-100 mb-8">
                     <h3 class="text-xs font-bold text-brand-dark uppercase tracking-wider mb-4 border-b border-green-200 pb-2">Tips Perawatan</h3>
                     <ul class="space-y-3 text-sm text-gray-700">
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 text-center"><i class="fas fa-sun text-brand text-lg"></i></div>
-                            <span>Cahaya terang tidak langsung</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 text-center"><i class="fas fa-tint text-blue-500 text-lg"></i></div>
-                            <span>Siram saat 2-3 cm tanah atas kering</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 text-center"><i class="fas fa-thermometer-half text-orange-500 text-lg"></i></div>
-                            <span>Suhu ideal 18&deg;C - 30&deg;C</span>
-                        </li>
+                        @foreach(explode("\n", $product->care_tips) as $tip)
+                            @if(trim($tip))
+                            <li class="flex items-start gap-3">
+                                <div class="w-6 text-center mt-0.5"><i class="fas fa-check text-brand"></i></div>
+                                <span>{{ $tip }}</span>
+                            </li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
+                @endif
 
                 <!-- Action Buttons -->
                 <div class="mt-auto">
-                    <div class="flex flex-col sm:flex-row gap-4 mb-4">
-                        <button class="flex-1 border-2 border-brand text-brand hover:bg-brand-light font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider">
-                            Tambah ke Keranjang
+                    <form action="{{ url('/cart/add') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                            <button type="submit" name="action" value="cart" class="flex-1 border-2 border-brand text-brand hover:bg-brand-light font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider">
+                                Tambah ke Keranjang
+                            </button>
+                            <button type="submit" name="action" value="checkout" class="flex-1 bg-brand text-white hover:bg-brand-dark font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider shadow-md">
+                                Beli Sekarang
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <form action="{{ url('/wishlist/add') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit" class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 font-medium text-sm transition py-2">
+                            <i class="far fa-heart"></i> Simpan ke Wishlist
                         </button>
-                        <button class="flex-1 bg-brand text-white hover:bg-brand-dark font-bold py-3 px-6 rounded-md transition uppercase text-sm tracking-wider shadow-md">
-                            Beli Sekarang
-                        </button>
-                    </div>
-                    <button class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 font-medium text-sm transition py-2">
-                        <i class="far fa-heart"></i> Simpan ke Wishlist
-                    </button>
+                    </form>
                 </div>
             </div>
 
@@ -132,68 +108,40 @@
     </div>
 
     <!-- Related Products Section -->
+    @if($relatedProducts->count() > 0)
     <section class="container mx-auto px-6 py-8 mb-12">
         <div class="flex justify-between items-end mb-8">
             <h2 class="text-2xl font-bold text-gray-900 uppercase tracking-wide">Katalog Serupa</h2>
-            <a href="{{ url('/katalog') }}" class="text-sm font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-1 uppercase tracking-wider">Lihat Semua</a>
+            <a href="{{ route('katalog', ['category' => $product->category->slug ?? $product->category->name]) }}" class="text-sm font-bold text-gray-900 border-b border-gray-900 hover:text-brand hover:border-brand transition pb-1 uppercase tracking-wider">Lihat Semua</a>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            
-            <!-- Card 1 -->
+            @foreach($relatedProducts as $related)
+            <!-- Card -->
             <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
-                <div class="h-48 bg-gray-100">
-                    <img src="https://images.unsplash.com/photo-1599598425947-33002629e0fa?auto=format&fit=crop&w=400&q=80" alt="Sansevieria" class="w-full h-full object-cover">
+                <div class="h-48 bg-gray-100 relative group cursor-pointer block">
+                    <a href="{{ route('katalog.show', $related->slug) }}">
+                        <img src="{{ Str::startsWith($related->image_url, 'http') ? $related->image_url : asset('storage/' . $related->image_url) }}" alt="{{ $related->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    </a>
                 </div>
                 <div class="p-5 flex flex-col flex-grow">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Indoor</span>
-                    <h3 class="font-bold text-gray-900 text-lg mb-1">Sansevieria</h3>
-                    <p class="text-brand-dark font-bold mb-4">Rp 85.000</p>
-                    <button class="mt-auto w-full border border-gray-300 text-gray-700 font-bold py-2 text-xs uppercase tracking-wider hover:border-brand hover:text-brand transition rounded-sm">Detail</button>
+                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">{{ $related->category->name }}</span>
+                    <a href="{{ route('katalog.show', $related->slug) }}" class="hover:text-brand transition block">
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">{{ $related->name }}</h3>
+                    </a>
+                    <p class="text-brand-dark font-bold mb-4">Rp {{ number_format($related->price, 0, ',', '.') }}</p>
+                    
+                    <form action="{{ url('/cart/add') }}" method="POST" class="mt-auto w-full">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $related->id }}">
+                        <button type="submit" class="w-full border border-gray-300 text-gray-700 font-bold py-2 text-xs uppercase tracking-wider hover:border-brand hover:text-brand transition rounded-sm">Tambah</button>
+                    </form>
                 </div>
             </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
-                <div class="h-48 bg-gray-100">
-                    <img src="https://images.unsplash.com/photo-1612363228104-db838b00a6e3?auto=format&fit=crop&w=400&q=80" alt="Philodendron" class="w-full h-full object-cover">
-                </div>
-                <div class="p-5 flex flex-col flex-grow">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Indoor</span>
-                    <h3 class="font-bold text-gray-900 text-lg mb-1">Philodendron</h3>
-                    <p class="text-brand-dark font-bold mb-4">Rp 120.000</p>
-                    <button class="mt-auto w-full border border-gray-300 text-gray-700 font-bold py-2 text-xs uppercase tracking-wider hover:border-brand hover:text-brand transition rounded-sm">Detail</button>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
-                <div class="h-48 bg-gray-100">
-                    <img src="https://images.unsplash.com/photo-1620127351139-44e21a224a1b?auto=format&fit=crop&w=400&q=80" alt="Calathea" class="w-full h-full object-cover">
-                </div>
-                <div class="p-5 flex flex-col flex-grow">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Outdoor</span>
-                    <h3 class="font-bold text-gray-900 text-lg mb-1">Calathea</h3>
-                    <p class="text-brand-dark font-bold mb-4">Rp 150.000</p>
-                    <button class="mt-auto w-full border border-gray-300 text-gray-700 font-bold py-2 text-xs uppercase tracking-wider hover:border-brand hover:text-brand transition rounded-sm">Detail</button>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition flex flex-col">
-                <div class="h-48 bg-gray-100">
-                    <img src="https://images.unsplash.com/photo-1603436326446-7dc41f021c7a?auto=format&fit=crop&w=400&q=80" alt="Ficus Lyrata" class="w-full h-full object-cover">
-                </div>
-                <div class="p-5 flex flex-col flex-grow">
-                    <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Indoor</span>
-                    <h3 class="font-bold text-gray-900 text-lg mb-1">Ficus Lyrata</h3>
-                    <p class="text-brand-dark font-bold mb-4">Rp 300.000</p>
-                    <button class="mt-auto w-full border border-gray-300 text-gray-700 font-bold py-2 text-xs uppercase tracking-wider hover:border-brand hover:text-brand transition rounded-sm">Detail</button>
-                </div>
-            </div>
-
+            @endforeach
         </div>
     </section>
+    @endif
 
     <!-- Footer (Sama dengan halaman lain) -->
     <footer class="bg-brand-light pt-16 pb-8 border-t border-green-100">

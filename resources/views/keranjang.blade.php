@@ -14,22 +14,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Navbar -->
-    <nav class="bg-white container mx-auto px-6 py-4 flex justify-between items-center border-b border-gray-100">
-        <div class="flex items-center gap-2 flex-1">
-            <img src="{{ asset('img/logosetaman.png') }}" alt="Logo Setaman Bogor" class="h-14 w-auto">
-            <div class="text-2xl font-bold text-brand-dark">Setaman Bogor</div>
-        </div>
-        <div class="hidden md:flex space-x-16 text-sm font-medium justify-center">
-            <a href="{{ url('/') }}" class="text-gray-500 hover:text-brand transition">Beranda</a>
-            <a href="{{ url('/katalog') }}" class="text-gray-500 hover:text-brand transition">Katalog</a>
-            <a href="javascript:void(0)" class="text-gray-500 hover:text-brand transition">Edukasi</a>
-        </div>
-        <div class="flex space-x-4 text-gray-600 flex-1 justify-end">
-            <a href="{{ url('/keranjang') }}" class="text-brand"><i class="fas fa-shopping-cart"></i></a>
-            <a href="{{ url('/login') }}" class="hover:text-brand transition"><i class="fas fa-user"></i></a>
-        </div>
-    </nav>
+    <x-navbar />
 
     <!-- Main Content: Keranjang -->
     <main class="container mx-auto px-6 py-12">
@@ -40,57 +25,74 @@
             <!-- Kolom Kiri: Daftar Produk -->
             <div class="lg:w-2/3 flex flex-col gap-6">
                 
-                <!-- [AWAL LOOPING PHP DARI DATABASE DI SINI] -->
-
-                <!-- Item Keranjang 1 -->
-                <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm">
-                    <!-- Gambar -->
-                    <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=300&q=80" alt="Monstera Deliciosa" class="w-full h-full object-cover">
+                @if(session('success'))
+                    <div class="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md text-sm font-medium">
+                        {{ session('success') }}
                     </div>
-                    
-                    <!-- Info Produk -->
-                    <div class="flex-grow flex flex-col justify-center">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Indoor / Botanical</span>
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Monstera Deliciosa</h3>
-                        <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp 250.000</p>
-                    </div>
+                @endif
 
-                    <!-- Kuantitas & Hapus -->
-                    <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
-                        <!-- Input Jumlah -->
-                        <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                            <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">-</button>
-                            <input type="text" value="1" class="w-10 text-center text-sm font-semibold text-gray-900 focus:outline-none border-x border-gray-300 py-1" readonly>
-                            <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">+</button>
+                @if(session('error'))
+                    <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm font-medium">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @php $subtotal = 0; @endphp
+
+                @if($cart && $cart->items->count() > 0)
+                    @foreach($cart->items as $item)
+                    @php $subtotal += $item->product->price * $item->quantity; @endphp
+                    <!-- Item Keranjang -->
+                    <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
+                        <!-- Gambar -->
+                        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 relative">
+                            <a href="{{ route('katalog.show', $item->product->slug) }}" class="block w-full h-full">
+                                <img src="{{ Str::startsWith($item->product->image_url, 'http') ? $item->product->image_url : asset('storage/' . $item->product->image_url) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                            </a>
                         </div>
-                        <button class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
-                    </div>
-                </div>
-
-                <!-- Item Keranjang 2 -->
-                <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm">
-                    <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                        <img src="https://images.unsplash.com/photo-1603436326446-7dc41f021c7a?auto=format&fit=crop&w=300&q=80" alt="Ficus Lyrata" class="w-full h-full object-cover">
-                    </div>
-                    
-                    <div class="flex-grow flex flex-col justify-center">
-                        <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Indoor / Air Purifying</span>
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Ficus Lyrata</h3>
-                        <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp 350.000</p>
-                    </div>
-
-                    <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
-                        <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                            <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">-</button>
-                            <input type="text" value="1" class="w-10 text-center text-sm font-semibold text-gray-900 focus:outline-none border-x border-gray-300 py-1" readonly>
-                            <button class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">+</button>
+                        
+                        <!-- Info Produk -->
+                        <div class="flex-grow flex flex-col justify-center">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">{{ $item->product->category->name }}</span>
+                            <a href="{{ route('katalog.show', $item->product->slug) }}" class="hover:text-brand transition">
+                                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ $item->product->name }}</h3>
+                            </a>
+                            <p class="text-brand-dark font-bold text-lg mb-4 sm:mb-0">Rp {{ number_format($item->product->price, 0, ',', '.') }}</p>
                         </div>
-                        <button class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
-                    </div>
-                </div>
 
-                <!-- [AKHIR LOOPING PHP DARI DATABASE DI SINI] -->
+                        <!-- Kuantitas & Hapus -->
+                        <div class="flex flex-row sm:flex-col items-end gap-4 sm:gap-6 w-full sm:w-auto justify-between sm:justify-start">
+                            <!-- Input Jumlah -->
+                            <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                                <form action="{{ route('cart.update') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="item_id" value="{{ $item->id }}">
+                                    <input type="hidden" name="action" value="decrement">
+                                    <button type="submit" class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">-</button>
+                                </form>
+                                <input type="text" value="{{ $item->quantity }}" class="w-10 text-center text-sm font-semibold text-gray-900 focus:outline-none border-x border-gray-300 py-1" readonly>
+                                <form action="{{ route('cart.update') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="item_id" value="{{ $item->id }}">
+                                    <input type="hidden" name="action" value="increment">
+                                    <button type="submit" class="px-3 py-1 bg-white hover:bg-gray-100 text-gray-600 transition">+</button>
+                                </form>
+                            </div>
+                            <form action="{{ route('cart.remove') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="item_id" value="{{ $item->id }}">
+                                <button type="submit" class="text-xs font-bold text-gray-400 hover:text-red-500 uppercase tracking-wider transition underline">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
+                    @endforeach
+                @else
+                    <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
+                        <i class="fas fa-shopping-basket text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-lg mb-4">Keranjang Anda masih kosong.</p>
+                        <a href="{{ route('katalog') }}" class="bg-brand text-white font-bold py-2 px-6 rounded-md hover:bg-brand-dark transition uppercase text-sm tracking-wider">Mulai Belanja</a>
+                    </div>
+                @endif
 
             </div>
 
@@ -102,7 +104,7 @@
                     <div class="space-y-4 text-sm text-gray-600 mb-6">
                         <div class="flex justify-between">
                             <span>Subtotal</span>
-                            <span class="font-bold text-gray-900">Rp 600.000</span>
+                            <span class="font-bold text-gray-900">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span>Estimasi Pengiriman</span>
@@ -114,14 +116,14 @@
 
                     <div class="flex justify-between items-end mb-8">
                         <span class="text-base font-bold text-gray-900 uppercase tracking-wider">Total</span>
-                        <span class="text-2xl font-bold text-brand-dark">Rp 600.000</span>
+                        <span class="text-2xl font-bold text-brand-dark">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
                     </div>
 
                     <div class="flex flex-col gap-3">
-                        <button class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3.5 px-6 rounded-md transition uppercase text-xs tracking-widest shadow-md">
+                        <a href="{{ url('/checkout') }}" class="{{ $subtotal > 0 ? 'bg-brand hover:bg-brand-dark' : 'bg-gray-400 cursor-not-allowed' }} text-white text-center font-bold py-3.5 px-6 rounded-md transition uppercase text-xs tracking-widest shadow-md">
                             Lanjut ke Checkout
-                        </button>
-                        <a href="{{ url('/katalog') }}" class="w-full text-center bg-white border border-gray-300 hover:border-brand hover:text-brand text-gray-700 font-bold py-3 px-6 rounded-md transition uppercase text-xs tracking-widest">
+                        </a>
+                        <a href="{{ route('katalog') }}" class="w-full text-center bg-white border border-gray-300 hover:border-brand hover:text-brand text-gray-700 font-bold py-3 px-6 rounded-md transition uppercase text-xs tracking-widest">
                             Lanjutkan Belanja
                         </a>
                     </div>
