@@ -29,4 +29,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id', 'id');
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(UserActivity::class, 'user_id', 'id');
+    }
+
+    public function logActivity($activity)
+    {
+        return $this->activities()->create([
+            'activity' => $activity,
+            'created_at' => now(),
+        ]);
+    }
 }

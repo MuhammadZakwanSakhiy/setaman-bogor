@@ -56,6 +56,8 @@ class CartController extends Controller
             ]);
         }
 
+        auth()->user()->logActivity("Menambahkan {$product->name} ke keranjang belanja");
+
         if ($request->action == 'checkout') {
             return redirect()->route('checkout.index');
         }

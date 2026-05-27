@@ -95,6 +95,21 @@
                 @endif
             </div>
         </div>
+
+        <!-- WhatsApp Message Log -->
+        @if($order->whatsapp_message)
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                <h3 class="font-bold text-gray-900 uppercase tracking-wider text-sm">Pesan WhatsApp (Log Pembayaran)</h3>
+                <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-semibold uppercase tracking-wider">Terkirim</span>
+            </div>
+            <div class="p-6">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 font-mono text-sm text-gray-800 whitespace-pre-wrap leading-relaxed shadow-inner">
+                    {{ $order->whatsapp_message }}
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 
     <!-- Sidebar / Aksi -->

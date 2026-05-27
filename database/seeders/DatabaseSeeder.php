@@ -15,16 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed initial article categories
-        $this->call(\Database\Seeders\ArticleCategorySeeder::class);
-
-        // Seed products and categories
-        $this->call([
-            \Database\Seeders\CategorySeeder::class,
-            \Database\Seeders\ProductSeeder::class,
-        ]);
-
-                User::firstOrCreate([
+        // Seed users first so they are available for other seeders
+        User::firstOrCreate([
             'name' => 'Admin Setaman',
             'email' => 'admin@setaman.com',
             'password' => bcrypt('password'),
@@ -36,6 +28,28 @@ class DatabaseSeeder extends Seeder
             'email' => 'pelanggan@setaman.com',
             'password' => bcrypt('password'),
             'role' => 'user',
+        ]);
+
+        // Seed initial article categories
+        $this->call(\Database\Seeders\ArticleCategorySeeder::class);
+
+        // Seed articles
+        $this->call(\Database\Seeders\ArticleSeeder::class);
+
+        // Seed products and categories
+        $this->call([
+            \Database\Seeders\CategorySeeder::class,
+            \Database\Seeders\ProductSeeder::class,
+        ]);
+
+        // Seed settings
+        $this->call(\Database\Seeders\SettingSeeder::class);
+
+        // Seed shipping methods, orders, and reviews
+        $this->call([
+            \Database\Seeders\ShippingMethodSeeder::class,
+            \Database\Seeders\OrderSeeder::class,
+            \Database\Seeders\ReviewSeeder::class,
         ]);
     }
 }

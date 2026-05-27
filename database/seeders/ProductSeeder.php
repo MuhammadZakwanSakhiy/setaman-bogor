@@ -103,6 +103,17 @@ class ProductSeeder extends Seeder
                 'image_url' => 'https://images.unsplash.com/photo-1620127351139-44e21a224a1b?auto=format&fit=crop&w=400&q=80',
                 'is_active' => true,
                 'is_best_seller' => false,
+            ],
+            [
+                'name' => 'Bunga Mawar',
+                'category_id' => $outdoor,
+                'price' => 75000,
+                'stock' => 15,
+                'description' => 'Tanaman hias bunga mawar merah yang harum dan indah untuk mempercantik taman Anda.',
+                'care_tips' => "Sinar matahari langsung minimal 6 jam sehari\nSiram secara teratur 1-2 kali sehari\nLakukan pemangkasan berkala untuk merangsang bunga baru",
+                'image_url' => 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+                'is_active' => true,
+                'is_best_seller' => false,
             ]
         ];
 

@@ -27,8 +27,10 @@ class CheckoutController extends Controller
         $request->validate([
             'customer_name' => 'required|string|max:100',
             'customer_phone' => 'required|string|max:20',
-            'customer_address' => 'required|string',
+            'customer_address' => 'required|string|min:10',
             'note' => 'nullable|string'
+        ], [
+            'customer_address.min' => 'Alamat pengiriman harus detail.'
         ]);
 
         $cart = Cart::with('items.product')->where('user_id', auth()->id())->first();
@@ -92,17 +94,22 @@ class CheckoutController extends Controller
             'whatsapp_message' => $message
         ]);
 
-        // Clear cart
-        $cart->items()->delete();
-        $cart->delete();
-
-        // Update product stock
+        // Update product stock before deleting cart items
         foreach ($cart->items as $item) {
             $item->product->decrement('stock', $item->quantity);
         }
 
+        // Clear cart
+        $cart->items()->delete();
+        $cart->delete();
+
+        auth()->user()->logActivity("Melakukan checkout pesanan: {$orderCode}");
+
         $waLink = "https://api.whatsapp.com/send?phone=" . $waNumber . "&text=" . urlencode($message);
 
-        return redirect()->away($waLink);
+        return redirect()->route('profile.orders')->with([
+            'success' => 'Pesanan Anda berhasil dibuat! Silakan kirimkan pesan konfirmasi di WhatsApp yang baru terbuka.',
+            'wa_link' => $waLink
+        ]);
     }
 }

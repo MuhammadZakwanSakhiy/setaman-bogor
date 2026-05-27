@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard | Setaman Bogor')</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logosetaman.png') }}">
     <!-- Tailwind CSS CDN -->
     
     <!-- Font Awesome for Icons -->
@@ -13,9 +14,18 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased flex h-screen overflow-hidden">
+    <script>
+        // Apply sidebar state immediately to prevent layout shift / flash
+        (function() {
+            const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+            if (isCollapsed && window.innerWidth >= 768) {
+                document.write('<style>#admin-sidebar { transform: translateX(-100%); } #main-content { padding-left: 0; }<\/style>');
+            }
+        })();
+    </script>
 
     <!-- Sidebar (Kiri) -->
-    <aside id="admin-sidebar" class="hidden md:block fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 transition-transform duration-300">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 transition-transform duration-300 z-30 md:translate-x-0 -translate-x-full">
         <!-- Logo & Title Area -->
         <div class="h-20 flex flex-col justify-center px-6 border-b border-gray-200">
             <h1 class="font-bold text-gray-900 text-lg">Admin Panel</h1>
@@ -70,7 +80,7 @@
     </aside>
 
     <!-- Main Content Wrapper (Kanan) -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    <div id="main-content" class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:pl-64">
         
         <!-- Topbar Header -->
         <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0 z-10">
@@ -109,9 +119,34 @@
         </main>
     </div>
     <script>
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            const sidebar = document.getElementById('admin-sidebar');
-            sidebar.classList.toggle('-translate-x-full');
+        const sidebar = document.getElementById('admin-sidebar');
+        const mainContent = document.getElementById('main-content');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        
+        // Initial state sync based on localStorage on DOM load
+        if (window.innerWidth >= 768) {
+            if (localStorage.getItem('sidebar-collapsed') === 'true') {
+                sidebar.classList.add('md:-translate-x-full');
+                mainContent.classList.remove('md:pl-64');
+            } else {
+                sidebar.classList.remove('md:-translate-x-full');
+                mainContent.classList.add('md:pl-64');
+            }
+        } else {
+            // Mobile: starts collapsed, but prepare classes
+            sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('md:translate-x-0');
+        }
+
+        sidebarToggle.addEventListener('click', function () {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.toggle('md:-translate-x-full');
+                mainContent.classList.toggle('md:pl-64');
+                const isCollapsed = sidebar.classList.contains('md:-translate-x-full');
+                localStorage.setItem('sidebar-collapsed', isCollapsed ? 'true' : 'false');
+            } else {
+                sidebar.classList.toggle('-translate-x-full');
+            }
         });
     </script>
 </body>

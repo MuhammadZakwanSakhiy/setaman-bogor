@@ -1,9 +1,22 @@
+@php
+    $inWishlist = false;
+    if (auth()->check()) {
+        $wishlist = \App\Models\Wishlist::where('user_id', auth()->id())->first();
+        if ($wishlist) {
+            $inWishlist = \App\Models\WishlistItem::where('wishlist_id', $wishlist->id)
+                ->where('product_id', $product->id)
+                ->exists();
+        }
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monstera Deliciosa - Detail Produk | Setaman Bogor</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logosetaman.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Tailwind CSS CDN -->
     
     <!-- Font Awesome for Icons -->
@@ -101,13 +114,21 @@
                         </div>
                     </form>
                     
-                    <form action="{{ url('/wishlist/add') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit" class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 font-medium text-sm transition py-2">
-                            <i class="far fa-heart"></i> Simpan ke Wishlist
-                        </button>
-                    </form>
+                    <div id="wishlist-container">
+                        @if(auth()->check())
+                            <button id="btn-wishlist" data-product-id="{{ $product->id }}" class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 font-medium text-sm transition py-2 focus:outline-none">
+                                @if($inWishlist)
+                                    <i class="fas fa-heart text-red-500"></i> Hapus dari Wishlist
+                                @else
+                                    <i class="far fa-heart"></i> Simpan ke Wishlist
+                                @endif
+                            </button>
+                        @else
+                            <a href="{{ route('login') }}" class="w-full flex items-center justify-center gap-2 text-gray-500 hover:text-red-500 font-medium text-sm transition py-2">
+                                <i class="far fa-heart"></i> Simpan ke Wishlist
+                            </a>
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -155,40 +176,40 @@
     </section>
     @endif
 
-    <!-- Footer (Sama dengan halaman lain) -->
-    <footer class="bg-brand-light pt-16 pb-8 border-t border-green-100">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-8 gap-8 mb-12">
-            <div class="md:col-span-5">
-                <h4 class="text-lg font-bold text-brand-dark mb-4">Setaman Bogor</h4>
-                <p class="text-gray-500 text-sm leading-relaxed">
-                    Cultivating calm in every corner. Solusi penghijauan modern untuk gaya hidup perkotaan Anda.
-                </p>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Perusahaan</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/tentang') }}" class="hover:underline">Tentang Kami</a></li>
-                    <li><a href="{{ url('/kontak') }}" class="hover:underline">Kontak</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Legal</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/privasi') }}" class="hover:underline">Kebijakan Privasi</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Sosial Media</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
-                    <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="container mx-auto px-6 pt-8 border-t border-green-200 text-xs text-gray-400">
-            &copy; 2026 Setaman Bogor
-        </div>
-    </footer>
+    <x-footer />
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnWishlist = document.getElementById('btn-wishlist');
+            if (btnWishlist) {
+                btnWishlist.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = btnWishlist.getAttribute('data-product-id');
+                    
+                    fetch("{{ route('wishlist.toggle') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({
+                            product_id: productId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'added') {
+                            btnWishlist.innerHTML = '<i class="fas fa-heart text-red-500"></i> Hapus dari Wishlist';
+                        } else if (data.status === 'removed') {
+                            btnWishlist.innerHTML = '<i class="far fa-heart"></i> Simpan ke Wishlist';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error toggling wishlist:', error);
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

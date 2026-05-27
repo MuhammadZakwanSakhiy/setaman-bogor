@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Pesanan | Setaman Bogor</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logosetaman.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Tailwind CSS CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -61,7 +63,7 @@
                                 </td>
                                 <td class="p-4 text-center">
                                     <!-- Aksi detail tidak dibuat lengkap karena WA-based, tapi kita sediakan link WA fallback -->
-                                    <a href="https://api.whatsapp.com/send?phone=62895321313124&text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pesanan%20saya%20dengan%20kode%20{{ $order->order_code }}" target="_blank" class="inline-block bg-brand hover:bg-brand-dark text-white px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition">
+                                    <a href="https://api.whatsapp.com/send?phone={{ \App\Models\Setting::where('key', 'wa_number')->value('value') ?? '62895321313124' }}&text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pesanan%20saya%20dengan%20kode%20{{ $order->order_code }}" target="_blank" class="inline-block bg-brand hover:bg-brand-dark text-white px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition">
                                         Tanya Admin
                                     </a>
                                 </td>
@@ -92,5 +94,10 @@
         &copy; 2026 Setaman Bogor. Cultivating calm in every corner.
     </footer>
 
+    @if(session('wa_link'))
+        <script>
+            window.open("{{ session('wa_link') }}", '_blank');
+        </script>
+    @endif
 </body>
 </html>

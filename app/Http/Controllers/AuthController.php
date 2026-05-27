@@ -32,6 +32,7 @@ class AuthController extends Controller
             }
 
             $request->session()->regenerate();
+            Auth::user()->logActivity('Masuk ke akun');
 
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended('/admin/dashboard');
@@ -52,6 +53,24 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $phoneInput = $request->input('phone');
+        $countryCode = $request->input('country_code', '+62');
+        $combinedPhone = null;
+
+        if ($phoneInput !== null && $phoneInput !== '') {
+            $digits = ltrim($phoneInput, '0');
+            $digits = preg_replace('/[^0-9]/', '', $digits);
+            
+            $codeDigits = ltrim($countryCode, '+');
+            if (str_starts_with($digits, $codeDigits)) {
+                $digits = substr($digits, strlen($codeDigits));
+            }
+            
+            $combinedPhone = $countryCode . $digits;
+        }
+
+        $request->merge(['phone' => $combinedPhone]);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -64,8 +83,19 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
             'password' => Hash::make($validated['password']),
-            'role' => 'user', // Default is user
+            'role' => 'user',
         ]);
+
+        $user->profile()->create([
+            'avatar_url' => null,
+            'bio' => null,
+            'address' => null,
+            'is_public' => true,
+            'email_notifications' => true,
+            'dark_mode' => false,
+        ]);
+
+        $user->logActivity('Mendaftar akun baru');
 
         Auth::login($user);
 

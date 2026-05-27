@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wishlist Anda | Setaman Bogor</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logosetaman.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Tailwind CSS CDN -->
     
     <!-- Font Awesome for Icons -->
@@ -35,6 +37,7 @@
 
             @if($wishlist && $wishlist->items->count() > 0)
                 @foreach($wishlist->items as $item)
+                @if($item->product)
                 <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
                     <!-- Gambar -->
                     <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 relative">
@@ -68,6 +71,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 @endforeach
             @else
                 <div class="text-center py-12 bg-white border border-gray-200 rounded-xl">
@@ -138,40 +142,7 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white pt-16 pb-8 border-t border-gray-200 mt-auto">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-8 gap-8 mb-12">
-            <div class="md:col-span-5">
-                <h4 class="text-lg font-bold text-brand-dark mb-4">Setaman Bogor</h4>
-                <p class="text-gray-500 text-sm leading-relaxed">
-                    Cultivating calm in every corner. Solusi penghijauan modern untuk gaya hidup perkotaan Anda.
-                </p>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Perusahaan</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/tentang') }}" class="hover:underline">Tentang Kami</a></li>
-                    <li><a href="{{ url('/kontak') }}" class="hover:underline">Kontak</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Legal</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/privasi') }}" class="hover:underline">Kebijakan Privasi</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Sosial Media</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
-                    <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="container mx-auto px-6 pt-8 border-t border-gray-100 text-xs text-gray-400">
-            &copy; 2026 Setaman Bogor
-        </div>
-    </footer>
+    <x-footer />
 
 </body>
 </html>

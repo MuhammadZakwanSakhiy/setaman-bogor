@@ -4,6 +4,7 @@
         ['label' => 'Katalog', 'href' => url('/katalog'), 'active' => request()->is('katalog*') || request()->is('produk*')],
         ['label' => 'Edukasi', 'href' => url('/artikel'), 'active' => request()->is('artikel*')],
     ];
+    $cartCount = auth()->check() ? (\App\Models\Cart::where('user_id', auth()->id())->first()?->items()->sum('quantity') ?? 0) : 0;
 @endphp
 
 <nav class="container mx-auto px-6 py-4 flex items-center justify-between gap-4">
@@ -24,8 +25,13 @@
         <a href="{{ url('/wishlist') }}" class="grid h-10 w-10 place-items-center rounded-full hover:bg-brand-light hover:text-brand" aria-label="Wishlist">
             <i class="far fa-heart"></i>
         </a>
-        <a href="{{ url('/keranjang') }}" class="grid h-10 w-10 place-items-center rounded-full hover:bg-brand-light hover:text-brand" aria-label="Keranjang">
+        <a href="{{ url('/keranjang') }}" class="grid h-10 w-10 place-items-center rounded-full hover:bg-brand-light hover:text-brand relative" aria-label="Keranjang">
             <i class="fas fa-shopping-cart"></i>
+            @if($cartCount > 0)
+                <span class="absolute top-1 right-1 bg-red-500 text-white rounded-full text-[9px] font-bold h-4 w-4 flex items-center justify-center border border-white">
+                    {{ $cartCount }}
+                </span>
+            @endif
         </a>
         <a href="{{ url('/profil') }}" class="grid h-10 w-10 place-items-center rounded-full hover:bg-brand-light hover:text-brand" aria-label="Profil">
             <i class="fas fa-user"></i>

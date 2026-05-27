@@ -1,3 +1,13 @@
+@php
+    $cartCount = auth()->check() ? (\App\Models\Cart::where('user_id', auth()->id())->first()?->items()->sum('quantity') ?? 0) : 0;
+    $avatarUrl = null;
+    if (auth()->check()) {
+        $profile = auth()->user()->profile;
+        if ($profile && $profile->avatar_url) {
+            $avatarUrl = Str::startsWith($profile->avatar_url, 'http') ? $profile->avatar_url : asset('storage/' . $profile->avatar_url);
+        }
+    }
+@endphp
 <nav class="container mx-auto px-6 py-4 flex justify-between items-center bg-white border-b border-gray-100">
     <!-- Bagian Kiri: Logo -->
     <div class="flex items-center gap-2 flex-1">
@@ -21,11 +31,24 @@
                 <a href="{{ route('admin.dashboard') }}" class="text-xs font-bold bg-brand text-white px-3 py-1.5 rounded-md hover:bg-brand-dark transition mr-2 uppercase tracking-wider">Admin Dashboard</a>
             @endif
             <a href="{{ url('/wishlist') }}" class="hover:text-brand transition {{ request()->is('wishlist') ? 'text-brand' : '' }}" title="Wishlist"><i class="fas fa-heart text-lg"></i></a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition {{ request()->is('keranjang') ? 'text-brand' : '' }}" title="Keranjang"><i class="fas fa-shopping-cart text-lg"></i></a>
-            <div class="relative group cursor-pointer ml-2">
-                <i class="fas fa-user {{ request()->is('profil') ? 'text-brand' : '' }} hover:text-brand transition text-lg"></i>
+            <a href="{{ url('/keranjang') }}" class="hover:text-brand transition {{ request()->is('keranjang') ? 'text-brand' : '' }} relative" title="Keranjang">
+                <i class="fas fa-shopping-cart text-lg"></i>
+                @if($cartCount > 0)
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-[10px] font-bold h-4 w-4 flex items-center justify-center border border-white">
+                        {{ $cartCount }}
+                    </span>
+                @endif
+            </a>
+            <div class="relative ml-2">
+                <button id="user-menu-button" class="focus:outline-none cursor-pointer flex items-center">
+                    @if($avatarUrl)
+                        <img src="{{ $avatarUrl }}" class="w-8 h-8 rounded-full border border-gray-200 object-cover hover:border-brand transition">
+                    @else
+                        <i class="fas fa-user {{ request()->is('profil') ? 'text-brand' : '' }} hover:text-brand transition text-lg"></i>
+                    @endif
+                </button>
                 <!-- Dropdown -->
-                <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg py-1 hidden group-hover:block z-50">
+                <div id="user-menu-dropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg py-1 hidden z-50">
                     <div class="px-4 py-2 border-b border-gray-100">
                         <p class="text-sm font-bold text-gray-800">{{ auth()->user()->name }}</p>
                         <p class="text-xs text-gray-500 truncate">{{ auth()->user()->email }}</p>
@@ -43,3 +66,21 @@
         @endauth
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const button = document.getElementById('user-menu-button');
+        const dropdown = document.getElementById('user-menu-dropdown');
+        if (button && dropdown) {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', function(e) {
+                if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        }
+    });
+</script>

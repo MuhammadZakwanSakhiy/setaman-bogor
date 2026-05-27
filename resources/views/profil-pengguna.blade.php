@@ -1,9 +1,36 @@
+@php
+    $user = Auth::user();
+    $profile = $user->profile ?? $user->profile()->firstOrCreate([]);
+    $avatarUrl = $profile->avatar_url ? (Str::startsWith($profile->avatar_url, 'http') ? $profile->avatar_url : asset('storage/' . $profile->avatar_url)) : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cbd5e1"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>';
+
+    $userPhone = $user->phone;
+    $selectedCode = '+62';
+    $displayPhone = $userPhone;
+
+    if ($userPhone) {
+        foreach (['+62', '+60', '+65', '+673', '+66', '+63'] as $code) {
+            if (str_starts_with($userPhone, $code)) {
+                $selectedCode = $code;
+                $displayPhone = substr($userPhone, strlen($code));
+                break;
+            }
+        }
+        if (str_starts_with($userPhone, '62') && !str_starts_with($userPhone, '+')) {
+            $selectedCode = '+62';
+            $displayPhone = substr($userPhone, 2);
+        }
+    }
+
+    $activities = $user->activities()->orderBy('created_at', 'desc')->take(5)->get();
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Pengguna | Setaman Bogor</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logosetaman.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Tailwind CSS CDN -->
     
     <!-- Font Awesome for Icons -->
@@ -48,17 +75,22 @@
             <div class="lg:w-1/3">
                 <div class="bg-white border border-gray-200 p-6 lg:p-8 rounded-xl shadow-sm">
                     
-                    <!-- Avatar Placeholder -->
-                    <div class="w-full aspect-square bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center mb-8 relative group cursor-pointer hover:bg-gray-50 transition">
-                        <div class="text-center text-gray-400 group-hover:text-brand transition">
-                            <i class="fas fa-camera text-3xl mb-2"></i>
-                            <p class="text-xs font-bold uppercase tracking-widest border border-gray-300 px-3 py-1 bg-white rounded-sm">Avatar</p>
-                        </div>
-                    </div>
-
-                    <!-- Info User -->
-                    <form action="{{ route('profile.update') }}" method="POST" class="space-y-4">
+                    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
+                        
+                        <!-- Avatar Preview & Input -->
+                        <div id="avatar-container" class="w-full aspect-square bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center mb-8 relative group cursor-pointer hover:bg-gray-50 transition overflow-hidden">
+                            <img id="avatar-preview" src="{{ $avatarUrl }}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                                <div class="text-center text-white">
+                                    <i class="fas fa-camera text-3xl mb-2"></i>
+                                    <p class="text-xs font-bold uppercase tracking-widest border border-white px-3 py-1 rounded-sm bg-transparent">Ubah Avatar</p>
+                                </div>
+                            </div>
+                            <input type="file" name="avatar" id="avatar-input" class="hidden" accept="image/*">
+                        </div>
+
+                        <!-- Info User -->
                         <div>
                             <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Nama Lengkap</label>
                             <input type="text" name="name" value="{{ Auth::user()->name }}" class="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-brand font-bold text-gray-900" required>
@@ -69,7 +101,17 @@
                         </div>
                         <div>
                             <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Nomor WhatsApp</label>
-                            <input type="tel" name="phone" value="{{ Auth::user()->phone }}" class="w-full border-b border-gray-300 py-2 focus:outline-none focus:border-brand text-gray-700">
+                            <div class="flex gap-2">
+                                <select name="country_code" class="border-b border-gray-300 py-2 focus:outline-none focus:border-brand bg-white text-sm font-semibold">
+                                    <option value="+62" {{ $selectedCode == '+62' ? 'selected' : '' }}>🇮🇩 +62</option>
+                                    <option value="+60" {{ $selectedCode == '+60' ? 'selected' : '' }}>🇲🇾 +60</option>
+                                    <option value="+65" {{ $selectedCode == '+65' ? 'selected' : '' }}>🇸🇬 +65</option>
+                                    <option value="+673" {{ $selectedCode == '+673' ? 'selected' : '' }}>🇧🇳 +673</option>
+                                    <option value="+66" {{ $selectedCode == '+66' ? 'selected' : '' }}>🇹🇭 +66</option>
+                                    <option value="+63" {{ $selectedCode == '+63' ? 'selected' : '' }}>🇵🇭 +63</option>
+                                </select>
+                                <input type="tel" name="phone" value="{{ $displayPhone }}" class="flex-grow border-b border-gray-300 py-2 focus:outline-none focus:border-brand text-gray-700">
+                            </div>
                         </div>
                         <button type="submit" class="w-full mt-4 bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider shadow-sm">
                             Simpan Perubahan Profil
@@ -90,22 +132,18 @@
                     </div>
                     
                     <div class="space-y-0">
-                        <!-- Item Aktivitas 1 -->
-                        <a href="javascript:void(0)" class="flex justify-between items-center py-4 border-b border-gray-100 hover:bg-gray-50 transition px-2 rounded-md group">
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm mb-1 group-hover:text-brand transition">Membaca Artikel: Klasifikasi Paku-pakuan</h4>
-                                <p class="text-xs text-gray-500">2 Jam yang lalu &bull; Edukasi</p>
+                        @forelse ($activities as $activity)
+                            <div class="flex justify-between items-center py-4 border-b border-gray-100 hover:bg-gray-50 transition px-2 rounded-md group">
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-sm mb-1">{{ $activity->activity }}</h4>
+                                    <p class="text-xs text-gray-500">{{ $activity->created_at->diffForHumans() }}</p>
+                                </div>
                             </div>
-                            <i class="fas fa-chevron-right text-gray-400 group-hover:text-brand transition"></i>
-                        </a>
-                        <!-- Item Aktivitas 2 -->
-                        <a href="javascript:void(0)" class="flex justify-between items-center py-4 border-b border-gray-100 hover:bg-gray-50 transition px-2 rounded-md group border-transparent">
-                            <div>
-                                <h4 class="font-bold text-gray-800 text-sm mb-1 group-hover:text-brand transition">Menambahkan Anggrek Hutan ke Katalog</h4>
-                                <p class="text-xs text-gray-500">Kemarin &bull; Katalog</p>
+                        @empty
+                            <div class="text-center py-8 text-gray-500 text-sm text-gray-400">
+                                Belum ada aktivitas terbaru.
                             </div>
-                            <i class="fas fa-chevron-right text-gray-400 group-hover:text-brand transition"></i>
-                        </a>
+                        @endforelse
                     </div>
                 </div>
 
@@ -119,15 +157,32 @@
                             @csrf
                             <div>
                                 <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Password Lama</label>
-                                <input type="password" name="current_password" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-brand" required>
+                                <div class="relative">
+                                    <input type="password" name="current_password" id="current_password" class="w-full border border-gray-300 rounded-md px-3 pr-10 py-2 text-sm focus:outline-none focus:border-brand" required>
+                                    <button type="button" onclick="togglePasswordVisibility('current_password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-brand focus:outline-none">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Password Baru</label>
-                                <input type="password" name="password" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-brand" required minlength="8">
+                                <div class="relative">
+                                    <input type="password" name="password" id="password" class="w-full border border-gray-300 rounded-md px-3 pr-10 py-2 text-sm focus:outline-none focus:border-brand" required minlength="8">
+                                    <button type="button" onclick="togglePasswordVisibility('password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-brand focus:outline-none">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1 block">Konfirmasi Password Baru</label>
-                                <input type="password" name="password_confirmation" class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-brand" required minlength="8">
+                                <div class="relative">
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="w-full border border-gray-300 rounded-md px-3 pr-10 py-2 text-sm focus:outline-none focus:border-brand" required minlength="8">
+                                    <button type="button" onclick="togglePasswordVisibility('password_confirmation', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-brand focus:outline-none">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                </div>
+                                <span id="password-match-error" class="text-xs text-red-500 mt-1 hidden">Konfirmasi password tidak cocok.</span>
+                                <span id="password-match-success" class="text-xs text-green-600 mt-1 hidden">Password cocok.</span>
                             </div>
                             <button type="submit" class="w-full mt-2 bg-gray-900 hover:bg-black text-white font-bold py-2.5 px-4 rounded-md transition uppercase text-xs tracking-wider shadow-sm">
                                 Update Password
@@ -169,40 +224,68 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white pt-16 pb-8 border-t border-gray-200">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-8 gap-8 mb-12">
-            <div class="md:col-span-5">
-                <h4 class="text-lg font-bold text-brand-dark mb-4">Setaman Bogor</h4>
-                <p class="text-gray-500 text-sm leading-relaxed">
-                    Cultivating calm in every corner. Solusi penghijauan modern untuk gaya hidup perkotaan Anda.
-                </p>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Perusahaan</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/tentang') }}" class="hover:underline">Tentang Kami</a></li>
-                    <li><a href="{{ url('/kontak') }}" class="hover:underline">Kontak</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Legal</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/privasi') }}" class="hover:underline">Kebijakan Privasi</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Sosial Media</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
-                    <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="container mx-auto px-6 pt-8 border-t border-gray-100 text-xs text-gray-400">
-            &copy; 2026 Setaman Bogor
-        </div>
-    </footer>
+    <x-footer />
 
+    <script>
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('far', 'fa-eye');
+                icon.classList.add('fas', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fas', 'fa-eye-slash');
+                icon.classList.add('far', 'fa-eye');
+            }
+        }
+
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('password_confirmation');
+        const matchError = document.getElementById('password-match-error');
+        const matchSuccess = document.getElementById('password-match-success');
+
+        function checkPasswordMatch() {
+            if (confirmInput.value.length > 0) {
+                if (passwordInput.value === confirmInput.value) {
+                    confirmInput.classList.remove('border-red-500');
+                    confirmInput.classList.add('border-green-500');
+                    matchError.classList.add('hidden');
+                    matchSuccess.classList.remove('hidden');
+                } else {
+                    confirmInput.classList.remove('border-green-500');
+                    confirmInput.classList.add('border-red-500');
+                    matchSuccess.classList.add('hidden');
+                    matchError.classList.remove('hidden');
+                }
+            } else {
+                confirmInput.classList.remove('border-green-500', 'border-red-500');
+                matchError.classList.add('hidden');
+                matchSuccess.classList.add('hidden');
+            }
+        }
+
+        passwordInput.addEventListener('input', checkPasswordMatch);
+        confirmInput.addEventListener('input', checkPasswordMatch);
+
+        const avatarContainer = document.getElementById('avatar-container');
+        const avatarInput = document.getElementById('avatar-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+
+        if (avatarContainer && avatarInput && avatarPreview) {
+            avatarContainer.addEventListener('click', () => avatarInput.click());
+            avatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        avatarPreview.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    </script>
 </body>
 </html> 

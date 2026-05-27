@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edukasi & Artikel | Setaman Bogor</title>
+    <link class="favicon" rel="icon" type="image/png" href="{{ asset('img/logosetaman.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <!-- Tailwind CSS CDN -->
     
     <!-- Font Awesome for Icons -->
@@ -27,8 +29,10 @@
             
             <!-- Search Bar -->
             <div class="relative max-w-2xl">
-                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                <input type="text" placeholder="Cari artikel atau topik tanaman..." class="w-full border border-gray-300 rounded-md py-3 pl-12 pr-4 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition">
+                <form action="{{ route('artikel.index') }}" method="GET">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari artikel atau topik tanaman..." class="w-full border border-gray-300 rounded-md py-3 pl-12 pr-4 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition">
+                </form>
             </div>
         </div>
     </header>
@@ -84,8 +88,14 @@
                 </p>
             </div>
             <div class="md:w-1/2 w-full max-w-md">
-                <form class="flex w-full shadow-sm rounded-md overflow-hidden">
-                    <input type="email" placeholder="Alamat Email" class="flex-grow border border-gray-300 py-3 px-4 focus:outline-none focus:border-brand text-sm" required>
+                @if (session('success_subscription'))
+                    <div class="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md mb-4 text-xs font-semibold">
+                        {{ session('success_subscription') }}
+                    </div>
+                @endif
+                <form action="{{ route('subscribe') }}" method="POST" class="flex w-full shadow-sm rounded-md overflow-hidden">
+                    @csrf
+                    <input type="email" name="email" placeholder="Alamat Email" class="flex-grow border border-gray-300 py-3 px-4 focus:outline-none focus:border-brand text-sm" required>
                     <button type="submit" class="bg-brand text-white font-bold py-3 px-6 uppercase tracking-wider text-xs hover:bg-brand-dark transition">
                         Daftar
                     </button>
@@ -94,40 +104,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-brand-light pt-16 pb-8 border-t border-green-100">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-8 gap-8 mb-12">
-            <div class="md:col-span-5">
-                <h4 class="text-lg font-bold text-brand-dark mb-4">Setaman Bogor</h4>
-                <p class="text-gray-500 text-sm leading-relaxed">
-                    Cultivating calm in every corner. Solusi penghijauan modern untuk gaya hidup perkotaan Anda.
-                </p>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Perusahaan</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/tentang') }}" class="hover:underline">Tentang Kami</a></li>
-                    <li><a href="{{ url('/kontak') }}" class="hover:underline">Kontak</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Legal</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="{{ url('/privasi') }}" class="hover:underline">Kebijakan Privasi</a></li>
-                </ul>
-            </div>
-            <div class="md:col-span-1">
-                <h4 class="font-semibold text-brand-dark mb-4">Sosial Media</h4>
-                <ul class="space-y-2 text-sm text-brand">
-                    <li><a href="https://instagram.com" class="hover:underline">Instagram</a></li>
-                    <li><a href="https://youtube.com" class="hover:underline">YouTube</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="container mx-auto px-6 pt-8 border-t border-green-200 text-xs text-gray-400">
-            &copy; 2026 Setaman Bogor
-        </div>
-    </footer>
+    <x-footer />
 
 </body>
 </html>

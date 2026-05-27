@@ -63,7 +63,12 @@
                         <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-widest">Password</label>
                         <a href="javascript:void(0)" class="text-[10px] text-brand hover:text-brand-dark font-bold uppercase tracking-wider transition underline decoration-transparent hover:decoration-brand-dark">Lupa Password?</a>
                     </div>
-                    <input type="password" name="password" placeholder="********" class="w-full border border-gray-300 rounded-md px-4 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" required>
+                    <div class="relative">
+                        <input type="password" name="password" id="password" placeholder="********" class="w-full border border-gray-300 rounded-md px-4 pr-10 py-3.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition" required>
+                        <button type="button" onclick="togglePasswordVisibility('password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-brand focus:outline-none">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Tombol Masuk -->
@@ -105,5 +110,20 @@
         &copy; 2026 Setaman Bogor. Cultivating calm in every corner.
     </footer>
 
+    <script>
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('far', 'fa-eye');
+                icon.classList.add('fas', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fas', 'fa-eye-slash');
+                icon.classList.add('far', 'fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>

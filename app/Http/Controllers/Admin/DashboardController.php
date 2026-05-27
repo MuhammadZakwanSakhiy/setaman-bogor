@@ -27,15 +27,44 @@ class DashboardController extends Controller
         $recentOrders = Order::latest()->take(5)->with(['user'])->get();
 
         // Sales per month for current year (placeholder for chart)
+        $driver = DB::getDriverName();
+        if ($driver === 'sqlite') {
+            $monthExpr = "CAST(strftime('%m', created_at) AS INTEGER)";
+            $groupByExpr = "strftime('%m', created_at)";
+        } else {
+            $monthExpr = "EXTRACT(MONTH FROM created_at)";
+            $groupByExpr = "EXTRACT(MONTH FROM created_at)";
+        }
+
         $salesPerMonth = Order::select(
-                DB::raw("EXTRACT(MONTH FROM created_at) as month"),
+                DB::raw("$monthExpr as month"),
                 DB::raw('SUM(total_price) as total')
             )
             ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
+            ->groupBy(DB::raw($groupByExpr))
             ->orderBy('month')
             ->pluck('total', 'month')
             ->toArray();
+
+        // Weekly sales for the current month (driver-agnostic via PHP grouping)
+        $currentMonthOrders = Order::whereYear('created_at', date('Y'))
+            ->whereMonth('created_at', date('m'))
+            ->get();
+        $weeklySales = [0, 0, 0, 0];
+        foreach ($currentMonthOrders as $order) {
+            $day = $order->created_at->day;
+            if ($day <= 7) {
+                $weeklySales[0] += $order->total_price;
+            } elseif ($day <= 14) {
+                $weeklySales[1] += $order->total_price;
+            } elseif ($day <= 21) {
+                $weeklySales[2] += $order->total_price;
+            } else {
+                $weeklySales[3] += $order->total_price;
+            }
+        }
+
+        $monthlySalesData = array_values(array_replace(array_fill(1, 12, 0), $salesPerMonth));
 
         return view('admin.dashboard', compact(
             'totalOrders',
@@ -45,7 +74,9 @@ class DashboardController extends Controller
             'lowStockCount',
             'lowStockProducts',
             'recentOrders',
-            'salesPerMonth'
+            'salesPerMonth',
+            'monthlySalesData',
+            'weeklySales'
         ));
     }
 }

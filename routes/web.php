@@ -26,6 +26,7 @@ Route::get('/katalog/{slug}', [CatalogController::class, 'show'])->name('katalog
 
 Route::get('/artikel', [FrontendArticleController::class, 'index'])->name('artikel.index');
 Route::get('/artikel/{slug}', [FrontendArticleController::class, 'show'])->name('artikel.show');
+Route::post('/subscribe', [FrontendArticleController::class, 'subscribe'])->name('subscribe');
 
 
 
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::post('/wishlist/remove', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
     Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -64,13 +66,18 @@ Route::get('/privasi', [PageController::class, 'privasi'])->name('privasi');
 
 // Admin Routes protected by RoleMiddleware
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
     Route::resource('/products', ProductController::class);
     Route::resource('/categories', CategoryController::class)->except(['show']);
     Route::resource('/articles', ArticleController::class);
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
