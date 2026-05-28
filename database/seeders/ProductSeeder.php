@@ -12,7 +12,9 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $indoor = Category::where('name', 'Tanaman Indoor')->first()->id;
+        $indoorCategory = Category::query()->where('name', '=', 'Tanaman Indoor')->first();
+
+        $indoor = $indoorCategory->id;
 
         $products = [
             [
@@ -25,9 +27,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => true,
                 'images' => [
-                    'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture1.png',
+                    'products/Picture2.png'
                 ]
             ],
             [
@@ -40,9 +41,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => true,
                 'images' => [
-                    'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture3.png',
+                    'products/Picture4.png'
                 ]
             ],
             [
@@ -55,9 +55,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1612363228104-db838b00a6e3?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture5.png',
+                    'products/Picture6.png'
                 ]
             ],
             [
@@ -70,9 +69,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1597055181300-e3633a207518?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture7.png',
+                    'products/Picture8.png'
                 ]
             ],
             [
@@ -85,9 +83,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => true,
                 'images' => [
-                    'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture9.png',
+                    'products/Picture10.png'
                 ]
             ],
             [
@@ -100,9 +97,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1596547609652-9cb5d8d736bb?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture11.png',
+                    'products/Picture12.png'
                 ]
             ],
             [
@@ -115,9 +111,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1603436326446-7dc41f021c7a?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture13.png',
+                    'products/Picture14.png'
                 ]
             ],
             [
@@ -130,9 +125,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1620127351139-44e21a224a1b?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture15.png',
+                    'products/Picture16.png'
                 ]
             ],
             [
@@ -145,9 +139,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture17.png',
+                    'products/Picture18.png'
                 ]
             ],
             [
@@ -160,9 +153,8 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'is_best_seller' => false,
                 'images' => [
-                    'https://images.unsplash.com/photo-1599598425947-33002629e0fa?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=600&q=80',
-                    'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=600&q=80'
+                    'products/Picture19.png',
+                    'products/Picture20.png'
                 ]
             ]
         ];

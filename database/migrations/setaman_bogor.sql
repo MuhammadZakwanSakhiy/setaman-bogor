@@ -221,4 +221,64 @@ CREATE INDEX idx_articles_published ON articles(is_published);
 CREATE INDEX idx_reviews_product_id ON reviews(product_id);
 CREATE INDEX idx_product_tag_relations_tag_id ON product_tag_relations(tag_id);
 
+-- Laravel System Tables
+
+CREATE TABLE sessions (
+    id VARCHAR(255) PRIMARY KEY,
+    user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    ip_address VARCHAR(45),
+    user_agent TEXT,
+    payload TEXT NOT NULL,
+    last_activity INTEGER NOT NULL
+);
+CREATE INDEX idx_sessions_user_id ON sessions(user_id);
+CREATE INDEX idx_sessions_last_activity ON sessions(last_activity);
+
+CREATE TABLE cache (
+    key VARCHAR(255) PRIMARY KEY,
+    value TEXT NOT NULL,
+    expiration BIGINT NOT NULL
+);
+CREATE INDEX idx_cache_expiration ON cache(expiration);
+
+CREATE TABLE cache_locks (
+    key VARCHAR(255) PRIMARY KEY,
+    owner VARCHAR(255) NOT NULL,
+    expiration BIGINT NOT NULL
+);
+
+CREATE TABLE jobs (
+    id BIGSERIAL PRIMARY KEY,
+    queue VARCHAR(255) NOT NULL,
+    payload TEXT NOT NULL,
+    attempts SMALLINT NOT NULL,
+    reserved_at INTEGER,
+    available_at INTEGER NOT NULL,
+    created_at INTEGER NOT NULL
+);
+CREATE INDEX idx_jobs_queue ON jobs(queue);
+
+CREATE TABLE job_batches (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    total_jobs INTEGER NOT NULL,
+    pending_jobs INTEGER NOT NULL,
+    failed_jobs INTEGER NOT NULL,
+    failed_job_ids TEXT NOT NULL,
+    options TEXT,
+    cancelled_at INTEGER,
+    created_at INTEGER NOT NULL,
+    finished_at INTEGER
+);
+
+CREATE TABLE failed_jobs (
+    id BIGSERIAL PRIMARY KEY,
+    uuid VARCHAR(255) NOT NULL UNIQUE,
+    connection TEXT NOT NULL,
+    queue TEXT NOT NULL,
+    payload TEXT NOT NULL,
+    exception TEXT NOT NULL,
+    failed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 COMMIT;
