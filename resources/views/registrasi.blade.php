@@ -12,7 +12,7 @@
 
     <x-navbar />
 
-    <main class="flex-grow flex items-center justify-center p-6 py-12">
+    <main class="grow flex items-center justify-center p-6 py-12">
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm w-full max-w-2xl p-8 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-1 bg-brand"></div>
 
@@ -53,7 +53,7 @@
                             <option value="+66" {{ old('country_code') == '+66' ? 'selected' : '' }}>🇹🇭 +66</option>
                             <option value="+63" {{ old('country_code') == '+63' ? 'selected' : '' }}>🇵🇭 +63</option>
                         </select>
-                        <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="81234567890" class="flex-grow rounded-xl border border-gray-300 px-4 py-3 font-normal outline-none focus:border-brand">
+                        <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="81234567890" class="grow rounded-xl border border-gray-300 px-4 py-3 font-normal outline-none focus:border-brand">
                     </div>
                 </label>
                 <label class="grid gap-2 text-sm font-semibold text-brand-dark md:col-span-2">

@@ -74,7 +74,7 @@
                             <h3 class="text-base font-bold text-gray-900 uppercase tracking-wide">Pesanan Terakhir</h3>
                         </div>
                         <!-- Table -->
-                        <div class="overflow-x-auto flex-grow">
+                        <div class="overflow-x-auto grow">
                             <table class="w-full text-left text-sm text-gray-600">
                                 <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-500 border-b border-gray-200">
                                     <tr>

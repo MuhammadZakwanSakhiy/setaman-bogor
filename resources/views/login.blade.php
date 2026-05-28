@@ -19,7 +19,7 @@
     <x-navbar />
 
     <!-- Main Content: Login Box -->
-    <main class="flex-grow flex items-center justify-center p-6">
+    <main class="grow flex items-center justify-center p-6">
         
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm w-full max-w-md p-8 md:p-10 relative overflow-hidden">
             
@@ -87,9 +87,9 @@
 
             <!-- Divider ATAU -->
             <div class="flex items-center my-8">
-                <hr class="flex-grow border-gray-200">
+                <hr class="grow border-gray-200">
                 <span class="mx-4 text-[10px] font-semibold text-gray-400 uppercase tracking-widest">Atau</span>
-                <hr class="flex-grow border-gray-200">
+                <hr class="grow border-gray-200">
             </div>
 
             <!-- Social Login -->

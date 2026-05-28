@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -35,18 +36,39 @@ class ProductController extends Controller
             'is_active' => 'boolean',
             'is_best_seller' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'additional_images' => 'nullable|array',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . time();
         $validated['is_active'] = $request->has('is_active');
         $validated['is_best_seller'] = $request->has('is_best_seller');
 
+        // Create product first
+        $product = Product::create($validated);
+
+        // Process main image
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products', 'public');
-            $validated['image_url'] = $path;
+            $pImg = ProductImage::create([
+                'product_id' => $product->id,
+                'image_url' => $path,
+                'sort_order' => 0
+            ]);
+            $product->update(['image_id' => $pImg->id]);
         }
 
-        Product::create($validated);
+        // Process additional images
+        if ($request->hasFile('additional_images')) {
+            foreach ($request->file('additional_images') as $index => $file) {
+                $path = $file->store('products', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_url' => $path,
+                    'sort_order' => $index + 1
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -54,6 +76,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
+        $product->load('images');
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -69,6 +92,8 @@ class ProductController extends Controller
             'is_active' => 'boolean',
             'is_best_seller' => 'boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'additional_images' => 'nullable|array',
+            'additional_images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
@@ -78,29 +103,78 @@ class ProductController extends Controller
             $validated['slug'] = Str::slug($validated['name']) . '-' . time();
         }
 
+        $product->update($validated);
+
+        // Process new main image
         if ($request->hasFile('image')) {
-            // Delete old image
-            if ($product->image_url && Storage::disk('public')->exists($product->image_url)) {
-                Storage::disk('public')->delete($product->image_url);
-            }
+            // Delete old primary image if exists
+            $oldPrimary = $product->primaryImage;
+            
             $path = $request->file('image')->store('products', 'public');
-            $validated['image_url'] = $path;
+            $pImg = ProductImage::create([
+                'product_id' => $product->id,
+                'image_url' => $path,
+                'sort_order' => 0
+            ]);
+            $product->update(['image_id' => $pImg->id]);
+
+            if ($oldPrimary) {
+                if (Storage::disk('public')->exists($oldPrimary->image_url)) {
+                    Storage::disk('public')->delete($oldPrimary->image_url);
+                }
+                $oldPrimary->delete();
+            }
         }
 
-        $product->update($validated);
+        // Process new additional images
+        if ($request->hasFile('additional_images')) {
+            $maxSort = $product->images()->max('sort_order') ?? 0;
+            foreach ($request->file('additional_images') as $index => $file) {
+                $path = $file->store('products', 'public');
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image_url' => $path,
+                    'sort_order' => $maxSort + $index + 1
+                ]);
+            }
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product)
     {
-        if ($product->image_url && Storage::disk('public')->exists($product->image_url)) {
-            Storage::disk('public')->delete($product->image_url);
+        // Delete all associated images
+        foreach ($product->images as $img) {
+            if (Storage::disk('public')->exists($img->image_url)) {
+                Storage::disk('public')->delete($img->image_url);
+            }
+            $img->delete();
         }
         
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+    }
+
+    public function deleteImage(ProductImage $image)
+    {
+        $product = $image->product;
+        
+        // If this image is the primary image, nullify image_id on product
+        if ($product && $product->image_id === $image->id) {
+            // Find another image to set as primary, if any
+            $nextImage = $product->images()->where('id', '!=', $image->id)->first();
+            $product->update(['image_id' => $nextImage ? $nextImage->id : null]);
+        }
+
+        if (Storage::disk('public')->exists($image->image_url)) {
+            Storage::disk('public')->delete($image->image_url);
+        }
+
+        $image->delete();
+
+        return back()->with('success', 'Foto tambahan berhasil dihapus.');
     }
 
     public function export()

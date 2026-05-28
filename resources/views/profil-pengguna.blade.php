@@ -44,7 +44,7 @@
     <x-navbar />
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-12 flex-grow">
+    <main class="container mx-auto px-6 py-12 grow">
         
         <!-- Header Profil -->
         <div class="mb-6">
@@ -110,7 +110,7 @@
                                     <option value="+66" {{ $selectedCode == '+66' ? 'selected' : '' }}>🇹🇭 +66</option>
                                     <option value="+63" {{ $selectedCode == '+63' ? 'selected' : '' }}>🇵🇭 +63</option>
                                 </select>
-                                <input type="tel" name="phone" value="{{ $displayPhone }}" class="flex-grow border-b border-gray-300 py-2 focus:outline-none focus:border-brand text-gray-700">
+                                <input type="tel" name="phone" value="{{ $displayPhone }}" class="grow border-b border-gray-300 py-2 focus:outline-none focus:border-brand text-gray-700">
                             </div>
                         </div>
                         <button type="submit" class="w-full mt-4 bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded-md transition uppercase text-xs tracking-wider shadow-sm">
@@ -140,7 +140,7 @@
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-8 text-gray-500 text-sm text-gray-400">
+                            <div class="text-center py-8 text-gray-400 text-sm">
                                 Belum ada aktivitas terbaru.
                             </div>
                         @endforelse

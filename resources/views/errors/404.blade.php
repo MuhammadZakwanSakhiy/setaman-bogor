@@ -14,7 +14,7 @@
 
     <x-navbar />
 
-    <main class="flex-grow flex items-center justify-center container mx-auto px-6 py-12 text-center">
+    <main class="grow flex items-center justify-center container mx-auto px-6 py-12 text-center">
         <div>
             <div class="text-[100px] md:text-[150px] font-bold text-brand leading-none">404</div>
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-4">Halaman Tidak Ditemukan</h1>

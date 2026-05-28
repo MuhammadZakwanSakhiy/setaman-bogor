@@ -33,7 +33,7 @@
         </div>
         <div class="md:w-1/2">
             <!-- Placeholder for Hero Image -->
-            <img src="{{ asset('img/beranda.jpeg') }}" alt="Tanaman Monstera" class="rounded-2xl shadow-lg w-full object-cover h-[400px]">
+            <img src="{{ asset('img/beranda.jpeg') }}" alt="Tanaman Monstera" class="rounded-2xl shadow-lg w-full object-cover h-100">
         </div>
     </section>
 
@@ -74,7 +74,7 @@
             <!-- Category Card 1 -->
             <a href="{{ url('/katalog?category=tanaman-indoor') }}" class="block relative h-64 rounded-2xl overflow-hidden group">
                 <img src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=600&q=80" alt="Tanaman Indoor" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-t from-black/70 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                     <div>
                         <h3 class="text-white text-xl font-semibold">Tanaman Indoor</h3>
@@ -88,7 +88,7 @@
             <!-- Category Card 2 -->
             <a href="{{ url('/katalog?category=tanaman-outdoor') }}" class="block relative h-64 rounded-2xl overflow-hidden group">
                 <img src="https://images.unsplash.com/photo-1592424001801-09439c1b7e41?auto=format&fit=crop&w=600&q=80" alt="Tanaman Outdoor" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-t from-black/70 to-transparent"></div>
                 <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
                     <div>
                         <h3 class="text-white text-xl font-semibold">Tanaman Outdoor</h3>
@@ -106,7 +106,7 @@
     <section class="container mx-auto px-6 py-16 mb-16">
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-12 flex flex-col md:flex-row gap-12 items-center">
             <div class="md:w-1/2 relative">
-                <img src="https://images.unsplash.com/photo-1611843467160-25afb8df1074?auto=format&fit=crop&w=600&q=80" alt="Mengenal Setaman" class="rounded-2xl object-cover h-[350px] w-full">
+                <img src="https://images.unsplash.com/photo-1611843467160-25afb8df1074?auto=format&fit=crop&w=600&q=80" alt="Mengenal Setaman" class="rounded-2xl object-cover h-87.5 w-full">
                 <!-- Floating Badge -->
                 <div class="absolute -bottom-6 right-4 md:-right-6 bg-green-200 px-6 py-4 rounded-xl shadow-lg border border-white">
                     <div class="text-2xl font-bold text-brand-dark">10k+</div>

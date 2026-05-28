@@ -47,14 +47,14 @@
                     <!-- Item Keranjang -->
                     <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center relative shadow-sm hover:border-brand transition">
                         <!-- Gambar -->
-                        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 relative">
+                        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0 relative">
                             <a href="{{ route('katalog.show', $item->product->slug) }}" class="block w-full h-full">
                                 <img src="{{ Str::startsWith($item->product->image_url, 'http') ? $item->product->image_url : asset('storage/' . $item->product->image_url) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
                             </a>
                         </div>
                         
                         <!-- Info Produk -->
-                        <div class="flex-grow flex flex-col justify-center">
+                        <div class="grow flex flex-col justify-center">
                             <span class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">{{ $item->product->category->name }}</span>
                             <a href="{{ route('katalog.show', $item->product->slug) }}" class="hover:text-brand transition">
                                 <h3 class="text-lg font-bold text-gray-900 mb-1">{{ $item->product->name }}</h3>

@@ -64,7 +64,7 @@
                     </a>
                 @endauth
 
-                <a href="{{ route('katalog.show', $product->slug) }}" class="h-64 bg-gray-100 flex items-center justify-center relative group block cursor-pointer">
+                <a href="{{ route('katalog.show', $product->slug) }}" class="h-64 bg-gray-100 flex items-center justify-center relative group cursor-pointer">
                     <img src="{{ Str::startsWith($product->image_url, 'http') ? $product->image_url : asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
                     @if($product->stock == 0)
                         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
@@ -77,7 +77,7 @@
                     @endif
                 </a>
                 
-                <div class="p-6 flex-grow flex flex-col justify-between">
+                <div class="p-6 grow flex flex-col justify-between">
                     <div>
                         <p class="text-xs text-brand uppercase tracking-wider mb-1 font-semibold">{{ $product->category->name }}</p>
                         
@@ -271,11 +271,11 @@
                 cardsHtml += `
                     <div class="bg-white border border-gray-100 shadow-sm hover:shadow-md transition rounded-xl flex flex-col overflow-hidden relative animate-fade-in">
                         ${wishlistBtn}
-                        <a href="${product.detail_url}" class="h-64 bg-gray-100 flex items-center justify-center relative group block cursor-pointer">
+                        <a href="${product.detail_url}" class="h-64 bg-gray-100 flex items-center justify-center relative group cursor-pointer">
                             <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
                             ${stockBadge}
                         </a>
-                        <div class="p-6 flex-grow flex flex-col justify-between">
+                        <div class="p-6 grow flex flex-col justify-between">
                             <div>
                                 <p class="text-xs text-brand uppercase tracking-wider mb-1 font-semibold">${product.category_name}</p>
                                 <a href="${product.detail_url}" class="block hover:text-brand transition">

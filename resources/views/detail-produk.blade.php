@@ -41,12 +41,45 @@
     <main class="container mx-auto px-6 py-8">
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-12">
             
-            <!-- Left Column: Images -->
+            <!-- Left Column: Images Slider -->
+            @php
+                $productImages = $product->images()->orderBy('sort_order')->get();
+                if ($productImages->isEmpty() && $product->image_url) {
+                    $productImages = collect([new \App\Models\ProductImage(['image_url' => $product->image_url])]);
+                }
+            @endphp
             <div class="flex flex-col gap-4">
-                <!-- Main Image -->
-                <div class="w-full h-[400px] md:h-[500px] bg-gray-100 rounded-xl overflow-hidden">
-                    <img src="{{ Str::startsWith($product->image_url, 'http') ? $product->image_url : asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                <!-- Main Slider Container -->
+                <div class="relative w-full h-100 md:h-125 bg-gray-100 rounded-xl overflow-hidden group">
+                    <div id="product-slider" class="w-full h-full flex transition-transform duration-500 ease-in-out">
+                        @foreach($productImages as $index => $img)
+                            <div class="w-full h-full shrink-0">
+                                <img src="{{ Str::startsWith($img->image_url, 'http') ? $img->image_url : asset('storage/' . $img->image_url) }}" alt="{{ $product->name }} - Foto {{ $index + 1 }}" class="w-full h-full object-cover">
+                            </div>
+                        @endforeach
+                    </div>
+                    
+                    @if($productImages->count() > 1)
+                        <!-- Navigation Arrows -->
+                        <button onclick="prevSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition duration-300 opacity-0 group-hover:opacity-100">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition duration-300 opacity-0 group-hover:opacity-100">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    @endif
                 </div>
+
+                @if($productImages->count() > 1)
+                    <!-- Thumbnails -->
+                    <div class="flex gap-3 overflow-x-auto py-2">
+                        @foreach($productImages as $index => $img)
+                            <button onclick="goToSlide({{ $index }})" class="thumbnail-btn w-20 h-20 rounded-md overflow-hidden border-2 border-transparent transition duration-300 shrink-0 {{ $index === 0 ? 'border-brand' : '' }}">
+                                <img src="{{ Str::startsWith($img->image_url, 'http') ? $img->image_url : asset('storage/' . $img->image_url) }}" alt="Thumbnail {{ $index + 1 }}" class="w-full h-full object-cover">
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
             <!-- Right Column: Product Info -->
@@ -157,10 +190,10 @@
                         <img src="{{ Str::startsWith($related->image_url, 'http') ? $related->image_url : asset('storage/' . $related->image_url) }}" alt="{{ $related->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                     </a>
                 </div>
-                <div class="p-5 flex flex-col flex-grow">
+                <div class="p-5 flex flex-col grow">
                     <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">{{ $related->category->name }}</span>
                     <a href="{{ route('katalog.show', $related->slug) }}" class="hover:text-brand transition block">
-                        <h3 class="font-bold text-gray-900 text-lg mb-1">{{ $related->name }}</h3>
+                         <h3 class="font-bold text-gray-900 text-lg mb-1">{{ $related->name }}</h3>
                     </a>
                     <p class="text-brand-dark font-bold mb-4">Rp {{ number_format($related->price, 0, ',', '.') }}</p>
                     
@@ -179,6 +212,39 @@
     <x-footer />
 
     <script>
+        let currentSlide = 0;
+        const totalSlides = {{ isset($productImages) ? $productImages->count() : 1 }};
+        const slider = document.getElementById('product-slider');
+        const thumbnails = document.querySelectorAll('.thumbnail-btn');
+
+        function updateSlider() {
+            if (slider) {
+                slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            thumbnails.forEach((btn, index) => {
+                if (index === currentSlide) {
+                    btn.classList.add('border-brand');
+                } else {
+                    btn.classList.remove('border-brand');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSlider();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const btnWishlist = document.getElementById('btn-wishlist');
             if (btnWishlist) {

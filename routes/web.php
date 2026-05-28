@@ -71,6 +71,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     });
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
+    Route::delete('/products/images/{image}', [ProductController::class, 'deleteImage'])->name('products.delete-image');
     Route::resource('/products', ProductController::class);
     Route::resource('/categories', CategoryController::class)->except(['show']);
     Route::resource('/articles', ArticleController::class);

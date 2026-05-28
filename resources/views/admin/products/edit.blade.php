@@ -74,20 +74,46 @@
             <!-- Gambar Utama -->
             <div class="md:col-span-2 border border-gray-300 rounded-md p-4 bg-gray-50 flex gap-6 items-start">
                 @if($product->image_url)
-                    <div class="w-32 h-32 rounded-md overflow-hidden bg-white border border-gray-200 flex-shrink-0">
-                        <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                    <div class="w-32 h-32 rounded-md overflow-hidden bg-white border border-gray-200 shrink-0">
+                        <img src="{{ Str::startsWith($product->image_url, 'http') ? $product->image_url : asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                     </div>
                 @else
-                    <div class="w-32 h-32 rounded-md bg-gray-200 flex items-center justify-center flex-shrink-0 border border-gray-300 text-gray-400">
+                    <div class="w-32 h-32 rounded-md bg-gray-200 flex items-center justify-center shrink-0 border border-gray-300 text-gray-400">
                         <i class="fas fa-image text-4xl"></i>
                     </div>
                 @endif
                 <div class="flex-1">
                     <label for="image" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Ganti Foto Utama (Opsional)</label>
                     <input type="file" name="image" id="image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:uppercase file:tracking-wider file:bg-brand file:text-white hover:file:bg-brand-dark cursor-pointer">
-                    <p class="text-xs text-gray-500 mt-2">Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                    <p class="text-xs text-gray-500 mt-2">Biarkan kosong jika tidak ingin mengubah foto utama. Format: JPG, PNG, WEBP. Maks 5MB.</p>
                 </div>
             </div>
+
+            <!-- Upload Gambar Tambahan Baru -->
+            <div class="md:col-span-2 border border-gray-300 rounded-md p-4 bg-gray-50">
+                <label for="additional_images" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Unggah Foto Tambahan Baru</label>
+                <input type="file" name="additional_images[]" id="additional_images" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:uppercase file:tracking-wider file:bg-brand file:text-white hover:file:bg-brand-dark cursor-pointer">
+                <p class="text-xs text-gray-500 mt-2">Pilih beberapa foto sekaligus untuk ditambahkan. Format: JPG, PNG, WEBP. Maks 5MB.</p>
+            </div>
+
+            <!-- List Foto Tambahan Saat Ini -->
+            @if($product->images->where('id', '!=', $product->image_id)->count() > 0)
+                <div class="md:col-span-2 border border-gray-300 rounded-md p-4 bg-gray-50">
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-4">Daftar Foto Tambahan</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        @foreach($product->images->where('id', '!=', $product->image_id) as $img)
+                            <div class="relative group rounded-md overflow-hidden bg-white border border-gray-200 aspect-square">
+                                <img src="{{ Str::startsWith($img->image_url, 'http') ? $img->image_url : asset('storage/' . $img->image_url) }}" alt="Foto Tambahan" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                                    <button type="button" onclick="confirmDeleteImage({{ $img->id }})" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow transition-all duration-200 hover:scale-110">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <!-- Status Toggles -->
             <div class="md:col-span-2 flex flex-col sm:flex-row gap-6 pt-4 border-t border-gray-200">
@@ -109,4 +135,20 @@
         </div>
     </form>
 </div>
+
+<!-- Hidden Form for Image Deletion -->
+<form id="delete-image-form" action="" method="POST" class="hidden">
+    @csrf
+    @method('DELETE')
+</form>
+
+<script>
+    function confirmDeleteImage(imageId) {
+        if (confirm('Apakah Anda yakin ingin menghapus foto tambahan ini?')) {
+            const form = document.getElementById('delete-image-form');
+            form.action = "{{ url('/admin/products/images') }}/" + imageId;
+            form.submit();
+        }
+    }
+</script>
 @endsection

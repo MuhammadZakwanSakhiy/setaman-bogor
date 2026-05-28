@@ -25,7 +25,7 @@
     </script>
 
     <!-- Sidebar (Kiri) -->
-    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 transition-transform duration-300 z-30 md:translate-x-0 -translate-x-full">
+    <aside id="admin-sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 transition-transform duration-300 z-30 md:translate-x-0 -translate-x-full">
         <!-- Logo & Title Area -->
         <div class="h-20 flex flex-col justify-center px-6 border-b border-gray-200">
             <h1 class="font-bold text-gray-900 text-lg">Admin Panel</h1>
@@ -83,11 +83,11 @@
     <div id="main-content" class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:pl-64">
         
         <!-- Topbar Header -->
-        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 flex-shrink-0 z-10">
+        <header class="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0 z-10">
             <button id="sidebarToggle" class="text-gray-600 hover:text-brand mr-4">
                 <i class="fas fa-bars text-xl"></i>
             </button>
-            <h2 class="flex items-center font-black text-gray-900 text-lg tracking-wider hidden sm:flex"><img src="{{ asset('img/logosetaman.png') }}" alt="Logo" class="h-8 mr-2">SETAMAN BOGOR ADMIN</h2>
+            <h2 class="hidden sm:flex items-center font-black text-gray-900 text-lg tracking-wider"><img src="{{ asset('img/logosetaman.png') }}" alt="Logo" class="h-8 mr-2">SETAMAN BOGOR ADMIN</h2>
             <div class="flex items-center gap-6 ml-auto">
                 <!-- Search Box -->
                 <div class="relative hidden lg:block">

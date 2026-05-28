@@ -74,7 +74,14 @@
             <div class="md:col-span-2 border border-gray-300 rounded-md p-4 bg-gray-50">
                 <label for="image" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Foto Utama Produk</label>
                 <input type="file" name="image" id="image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:uppercase file:tracking-wider file:bg-brand file:text-white hover:file:bg-brand-dark cursor-pointer">
-                <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, WEBP. Maks 5MB.</p>
+            </div>
+
+            <!-- Gambar Tambahan -->
+            <div class="md:col-span-2 border border-gray-300 rounded-md p-4 bg-gray-50">
+                <label for="additional_images" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Foto Tambahan Produk (Bisa Pilih Banyak)</label>
+                <input type="file" name="additional_images[]" id="additional_images" accept="image/*" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-bold file:uppercase file:tracking-wider file:bg-brand file:text-white hover:file:bg-brand-dark cursor-pointer">
+                <p class="text-xs text-gray-500 mt-2">Bisa memilih lebih dari satu foto sekaligus. Format: JPG, PNG, WEBP. Maks 5MB per foto.</p>
             </div>
 
             <!-- Status Toggles -->

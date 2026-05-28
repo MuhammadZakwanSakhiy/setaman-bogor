@@ -29,7 +29,7 @@
     <main class="container mx-auto px-6 pb-16">
         
         <!-- Hero Image -->
-        <div class="w-full max-w-5xl mx-auto h-[300px] md:h-[500px] bg-gray-100 rounded-2xl overflow-hidden mb-12">
+        <div class="w-full max-w-5xl mx-auto h-75 md:h-125 bg-gray-100 rounded-2xl overflow-hidden mb-12">
             <img src="{{ Str::startsWith($article->image_url, 'http') ? $article->image_url : asset('storage/' . $article->image_url) }}" alt="{{ $article->title }}" class="w-full h-full object-cover">
         </div>
 
@@ -70,7 +70,7 @@
                     <div class="h-48 bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1614594805320-e6a3ee51e227?auto=format&fit=crop&w=400&q=80" alt="Monstera Adansonii" class="w-full h-full object-cover">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow">
+                    <div class="p-5 flex flex-col grow">
                         <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Outdoor</span>
                         <h3 class="font-bold text-gray-900 text-base mb-4">Monstera Adansonii</h3>
                         <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
@@ -82,7 +82,7 @@
                     <div class="h-48 bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=400&q=80" alt="Alocasia Reversa" class="w-full h-full object-cover">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow">
+                    <div class="p-5 flex flex-col grow">
                         <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Indoor</span>
                         <h3 class="font-bold text-gray-900 text-base mb-4">Alocasia Reversa</h3>
                         <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
@@ -94,7 +94,7 @@
                     <div class="h-48 bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1603436326446-7dc41f021c7a?auto=format&fit=crop&w=400&q=80" alt="Ficus Lyrata" class="w-full h-full object-cover">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow">
+                    <div class="p-5 flex flex-col grow">
                         <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Trees</span>
                         <h3 class="font-bold text-gray-900 text-base mb-4">Ficus Lyrata</h3>
                         <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>
@@ -106,7 +106,7 @@
                     <div class="h-48 bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1600412353723-f2ee4e90cb5d?auto=format&fit=crop&w=400&q=80" alt="Mentha Spicata" class="w-full h-full object-cover">
                     </div>
-                    <div class="p-5 flex flex-col flex-grow">
+                    <div class="p-5 flex flex-col grow">
                         <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 font-semibold">Herbs</span>
                         <h3 class="font-bold text-gray-900 text-base mb-4">Mentha Spicata</h3>
                         <a href="{{ url('/detail-produk') }}" class="mt-auto block text-center bg-black text-white font-bold py-2 text-xs uppercase tracking-wider hover:bg-brand transition rounded-sm">Detail Produk</a>

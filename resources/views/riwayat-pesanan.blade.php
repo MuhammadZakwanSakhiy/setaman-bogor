@@ -16,7 +16,7 @@
     <x-navbar />
 
     <!-- Main Content -->
-    <main class="container mx-auto px-6 py-12 flex-grow">
+    <main class="container mx-auto px-6 py-12 grow">
         
         <div class="mb-8 flex justify-between items-end border-b-4 border-gray-900 pb-2">
             <h1 class="text-3xl font-bold text-gray-900 uppercase tracking-wide">

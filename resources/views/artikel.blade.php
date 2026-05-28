@@ -38,7 +38,7 @@
     </header>
 
     <!-- Main Content: Article Grid -->
-    <main class="container mx-auto px-6 pb-16 flex-grow">
+    <main class="container mx-auto px-6 pb-16 grow">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             
             @forelse($articles as $article)
@@ -47,7 +47,7 @@
                     <img src="{{ Str::startsWith($article->image_url, 'http') ? $article->image_url : asset('storage/' . $article->image_url) }}" alt="{{ $article->title }}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
                 </a>
                 
-                <div class="p-6 flex-grow flex flex-col">
+                <div class="p-6 grow flex flex-col">
                     <span class="text-[10px] text-brand font-bold uppercase tracking-widest mb-2 block">Kategori {{ $article->category->name ?? 'Umum' }}</span>
                     
                     <a href="{{ route('artikel.show', $article->slug) }}" class="block hover:text-brand transition mb-3">
@@ -95,7 +95,7 @@
                 @endif
                 <form action="{{ route('subscribe') }}" method="POST" class="flex w-full shadow-sm rounded-md overflow-hidden">
                     @csrf
-                    <input type="email" name="email" placeholder="Alamat Email" class="flex-grow border border-gray-300 py-3 px-4 focus:outline-none focus:border-brand text-sm" required>
+                    <input type="email" name="email" placeholder="Alamat Email" class="grow border border-gray-300 py-3 px-4 focus:outline-none focus:border-brand text-sm" required>
                     <button type="submit" class="bg-brand text-white font-bold py-3 px-6 uppercase tracking-wider text-xs hover:bg-brand-dark transition">
                         Daftar
                     </button>
