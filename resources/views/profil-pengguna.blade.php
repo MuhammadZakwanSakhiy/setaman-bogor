@@ -47,10 +47,13 @@
     <main class="container mx-auto px-6 py-12 grow">
         
         <!-- Header Profil -->
-        <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 inline-block border-b-4 border-gray-900 pb-2 uppercase tracking-wide">
+        <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b-4 border-gray-900 pb-2">
+            <h1 class="text-3xl font-bold text-gray-900 uppercase tracking-wide">
                 Profil Pengguna
             </h1>
+            <a href="{{ route('profile.orders') }}" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white font-bold py-2.5 px-5 rounded-xl transition text-sm uppercase tracking-wider shadow-sm">
+                <i class="fas fa-shopping-bag"></i> Riwayat Pesanan Saya
+            </a>
         </div>
 
         @if (session('success'))

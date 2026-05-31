@@ -81,6 +81,12 @@
                     <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">No. WhatsApp / Telepon</p>
                     <p class="text-gray-900 font-medium">{{ $order->customer_phone }}</p>
                 </div>
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Metode Pembayaran</p>
+                    <span class="inline-block px-2.5 py-1 text-xs font-bold rounded {{ $order->payment_method === 'Midtrans' ? 'bg-purple-100 text-purple-700' : ($order->payment_method === 'Transfer Manual' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700') }}">
+                        {{ $order->payment_method }}
+                    </span>
+                </div>
                 <div class="md:col-span-2">
                     <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Alamat Pengiriman</p>
                     <p class="text-gray-900">{{ $order->customer_address }}</p>
@@ -122,7 +128,7 @@
             <div class="p-6">
                 @php
                     $colors = [
-                        'pending' => 'bg-yellow-100 text-yellow-700',
+                        'menunggu' => 'bg-yellow-100 text-yellow-700',
                         'diproses' => 'bg-blue-100 text-blue-700',
                         'dikirim' => 'bg-indigo-100 text-indigo-700',
                         'selesai' => 'bg-green-100 text-green-700',
@@ -141,7 +147,7 @@
                     <div class="mb-4">
                         <label for="status" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Ubah Status</label>
                         <select name="status" id="status" class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-brand focus:border-brand bg-white text-sm">
-                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending (Menunggu Pembayaran)</option>
+                            <option value="menunggu" {{ $order->status == 'menunggu' ? 'selected' : '' }}>Menunggu Pembayaran</option>
                             <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses (Sedang Disiapkan)</option>
                             <option value="dikirim" {{ $order->status == 'dikirim' ? 'selected' : '' }}>Dikirim (Dalam Perjalanan)</option>
                             <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai (Sudah Diterima)</option>

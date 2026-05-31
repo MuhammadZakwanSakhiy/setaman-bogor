@@ -95,6 +95,34 @@ class ProfileController extends Controller
         $orders = Order::where('user_id', auth()->id())
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
+
+        // Konfigurasi Midtrans untuk pengecekan status real-time
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY', 'SB-Mid-server-6nC_P4H9h7Bvx1ZqI-Uj10nJ');
+        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        foreach ($orders as $order) {
+            // Hanya periksa pesanan yang masih 'menunggu' dan memiliki token Snap asli (bukan simulasi offline)
+            if ($order->status === 'menunggu' && $order->snap_token && !str_starts_with($order->snap_token, 'DEMO_TOKEN_')) {
+                try {
+                    $status = \Midtrans\Transaction::status($order->order_code);
+                    $transactionStatus = $status->transaction_status ?? null;
+                    $fraudStatus = $status->fraud_status ?? null;
+
+                    if ($transactionStatus === 'settlement' || ($transactionStatus === 'capture' && $fraudStatus === 'accept')) {
+                        $order->update(['status' => 'diproses']);
+                        auth()->user()->logActivity("Pembayaran berhasil terverifikasi otomatis: {$order->order_code}");
+                    } elseif (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
+                        $order->update(['status' => 'dibatalkan']);
+                        auth()->user()->logActivity("Pesanan dibatalkan/pembayaran gagal terverifikasi: {$order->order_code}");
+                    }
+                } catch (\Exception $e) {
+                    // Abaikan eror agar halaman tidak crash jika server Midtrans sedang down/tidak terjangkau
+                    \Illuminate\Support\Facades\Log::warning("Gagal mengecek status Midtrans untuk {$order->order_code}: " . $e->getMessage());
+                }
+            }
+        }
                     
         return view('riwayat-pesanan', compact('orders'));
     }

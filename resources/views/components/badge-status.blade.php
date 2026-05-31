@@ -1,6 +1,6 @@
 @php
     $statusClass = [
-        'pending' => 'bg-amber-50 text-amber-700 border-amber-100',
+        'menunggu' => 'bg-amber-50 text-amber-700 border-amber-100',
         'diproses' => 'bg-blue-50 text-blue-700 border-blue-100',
         'dikirim' => 'bg-purple-50 text-purple-700 border-purple-100',
         'selesai' => 'bg-green-50 text-green-700 border-green-100',

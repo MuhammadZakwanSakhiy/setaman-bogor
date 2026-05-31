@@ -14,7 +14,7 @@ class Order extends Model
     protected $fillable = [
         'user_id', 'shipping_method_id', 'order_code', 'status', 
         'customer_name', 'customer_phone', 'customer_address', 
-        'note', 'subtotal_price', 'shipping_cost', 'total_price', 'whatsapp_message'
+        'note', 'subtotal_price', 'shipping_cost', 'total_price', 'whatsapp_message', 'payment_method', 'snap_token'
     ];
 
     public function user(): BelongsTo

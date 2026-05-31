@@ -37,7 +37,7 @@
                     <td class="px-6 py-4">
                         @php
                             $colors = [
-                                'pending' => 'bg-yellow-100 text-yellow-700',
+                                'menunggu' => 'bg-yellow-100 text-yellow-700',
                                 'diproses' => 'bg-blue-100 text-blue-700',
                                 'dikirim' => 'bg-indigo-100 text-indigo-700',
                                 'selesai' => 'bg-green-100 text-green-700',

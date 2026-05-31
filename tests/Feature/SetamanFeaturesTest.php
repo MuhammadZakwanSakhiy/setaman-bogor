@@ -220,3 +220,128 @@ test('profile avatar upload changes user profile image url', function () {
     expect($profile->avatar_url)->not->toBeNull();
     \Illuminate\Support\Facades\Storage::disk('public')->assertExists($profile->avatar_url);
 });
+
+test('checkout order process works with split address fields and payment_method', function () {
+    $user = User::factory()->create();
+    $cat = Category::create(['name' => 'Indoor', 'description' => 'Test']);
+    $product = Product::create([
+        'name' => 'Monstera Aroid',
+        'category_id' => $cat->id,
+        'price' => 150000,
+        'stock' => 10,
+        'description' => 'Test',
+        'is_active' => true,
+        'slug' => 'monstera-aroid',
+    ]);
+
+    // Create a cart with item
+    $cart = \App\Models\Cart::create(['user_id' => $user->id]);
+    \App\Models\CartItem::create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 2,
+    ]);
+
+    $response = $this->actingAs($user)->post('/checkout', [
+        'customer_name' => 'Test Customer',
+        'customer_phone' => '08123456789',
+        'province' => 'Jawa Barat',
+        'city' => 'Kabupaten Bogor',
+        'subdistrict' => 'Dramaga',
+        'village' => 'Sindangbarang',
+        'postal_code' => '16680',
+        'street' => 'Jalan Darmaga Regency Blok C No. 9',
+        'payment_method' => 'QRIS',
+        'note' => 'Bungkus pot plastik',
+    ]);
+
+    $response->assertRedirect('/pesanan');
+    $response->assertSessionHas('wa_link');
+
+    // Assert order was created with correct split address format
+    $this->assertDatabaseHas('orders', [
+        'customer_name' => 'Test Customer',
+        'payment_method' => 'QRIS',
+        'customer_address' => 'Jalan Darmaga Regency Blok C No. 9, Kel. Sindangbarang, Kec. Dramaga, Kabupaten Bogor, Prov. Jawa Barat, 16680',
+    ]);
+});
+
+test('midtrans webhook successfully processes capture accept status', function () {
+    $user = User::factory()->create();
+    $order = Order::create([
+        'user_id' => $user->id,
+        'order_code' => 'ORD-12345678',
+        'status' => 'menunggu',
+        'customer_name' => 'Test Customer',
+        'customer_phone' => '08123456789',
+        'customer_address' => 'Jalan Dramaga Regency',
+        'subtotal_price' => 150000,
+        'total_price' => 150000,
+        'payment_method' => 'QRIS',
+    ]);
+
+    $response = $this->postJson('/midtrans/webhook', [
+        'order_id' => 'ORD-12345678',
+        'transaction_status' => 'capture',
+        'fraud_status' => 'accept',
+    ]);
+
+    $response->assertStatus(200);
+    $response->assertJson(['message' => 'Webhook processed successfully']);
+
+    $order->refresh();
+    expect($order->status)->toBe('diproses');
+});
+
+test('midtrans webhook successfully processes settlement status', function () {
+    $user = User::factory()->create();
+    $order = Order::create([
+        'user_id' => $user->id,
+        'order_code' => 'ORD-87654321',
+        'status' => 'menunggu',
+        'customer_name' => 'Test Customer',
+        'customer_phone' => '08123456789',
+        'customer_address' => 'Jalan Dramaga Regency',
+        'subtotal_price' => 150000,
+        'total_price' => 150000,
+        'payment_method' => 'QRIS',
+    ]);
+
+    $response = $this->postJson('/midtrans/webhook', [
+        'order_id' => 'ORD-87654321',
+        'transaction_status' => 'settlement',
+    ]);
+
+    $response->assertStatus(200);
+    $response->assertJson(['message' => 'Webhook processed successfully']);
+
+    $order->refresh();
+    expect($order->status)->toBe('diproses');
+});
+
+test('midtrans webhook successfully cancels/expires/denies orders', function () {
+    $user = User::factory()->create();
+    $order = Order::create([
+        'user_id' => $user->id,
+        'order_code' => 'ORD-CANCEL12',
+        'status' => 'menunggu',
+        'customer_name' => 'Test Customer',
+        'customer_phone' => '08123456789',
+        'customer_address' => 'Jalan Dramaga Regency',
+        'subtotal_price' => 150000,
+        'total_price' => 150000,
+        'payment_method' => 'QRIS',
+    ]);
+
+    $response = $this->postJson('/midtrans/webhook', [
+        'order_id' => 'ORD-CANCEL12',
+        'transaction_status' => 'cancel',
+    ]);
+
+    $response->assertStatus(200);
+    $response->assertJson(['message' => 'Webhook processed successfully']);
+
+    $order->refresh();
+    expect($order->status)->toBe('dibatalkan');
+});
+

@@ -16,6 +16,11 @@ return new class extends Migration
             $table->text('avatar_url')->nullable();
             $table->text('bio')->nullable();
             $table->text('address')->nullable();
+            $table->string('province')->nullable();
+            $table->string('city')->nullable();
+            $table->string('subdistrict')->nullable();
+            $table->string('village')->nullable();
+            $table->string('postal_code', 10)->nullable();
             $table->boolean('is_public')->default(true);
             $table->boolean('email_notifications')->default(true);
             $table->boolean('dark_mode')->default(false);

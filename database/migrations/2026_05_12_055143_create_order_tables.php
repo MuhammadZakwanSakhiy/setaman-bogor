@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('shipping_method_id')->nullable()->constrained()->nullOnDelete();
             $table->string('order_code', 30)->unique();
-            $table->enum('status', ['pending', 'diproses', 'dikirim', 'selesai', 'dibatalkan'])->default('pending');
+            $table->enum('status', ['menunggu', 'diproses', 'dikirim', 'selesai', 'dibatalkan'])->default('menunggu');
             $table->string('customer_name', 100);
             $table->string('customer_phone', 20);
             $table->text('customer_address');
@@ -34,6 +34,8 @@ return new class extends Migration
             $table->decimal('shipping_cost', 10, 2)->default(0);
             $table->decimal('total_price', 12, 2)->default(0);
             $table->text('whatsapp_message')->nullable();
+            $table->string('payment_method', 50)->default('Midtrans');
+            $table->string('snap_token')->nullable();
             $table->timestamps();
             
             $table->index('status');

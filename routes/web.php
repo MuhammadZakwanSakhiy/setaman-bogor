@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\ArticleController as FrontendArticleController;
 use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\MidtransController;
 
 Route::get('/', function () {
     return view('beranda');
@@ -59,6 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 });
+
+Route::post('/midtrans/webhook', [MidtransController::class, 'webhook'])->name('midtrans.webhook');
 
 Route::get('/tentang', [PageController::class, 'tentang'])->name('tentang');
 Route::get('/kontak', [PageController::class, 'kontak'])->name('kontak');

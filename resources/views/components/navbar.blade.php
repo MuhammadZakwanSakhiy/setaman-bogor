@@ -54,6 +54,7 @@
                         <p class="text-xs text-gray-500 truncate">{{ auth()->user()->email }}</p>
                     </div>
                     <a href="{{ url('/profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition">Profil Saya</a>
+                    <a href="{{ route('profile.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-brand transition">Pesanan Saya</a>
                     <form method="POST" action="{{ route('logout') }}" class="border-t border-gray-100 mt-1">
                         @csrf
                         <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition">Keluar</button>

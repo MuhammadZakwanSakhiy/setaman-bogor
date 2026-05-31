@@ -49,7 +49,7 @@
                                 <td class="p-4">
                                     @php
                                         $colors = [
-                                            'pending' => 'bg-yellow-100 text-yellow-800',
+                                            'menunggu' => 'bg-yellow-100 text-yellow-800',
                                             'diproses' => 'bg-blue-100 text-blue-800',
                                             'dikirim' => 'bg-indigo-100 text-indigo-800',
                                             'selesai' => 'bg-green-100 text-green-800',
@@ -62,10 +62,15 @@
                                     </span>
                                 </td>
                                 <td class="p-4 text-center">
-                                    <!-- Aksi detail tidak dibuat lengkap karena WA-based, tapi kita sediakan link WA fallback -->
-                                    <a href="https://api.whatsapp.com/send?phone={{ \App\Models\Setting::where('key', 'wa_number')->value('value') ?? '62895321313124' }}&text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pesanan%20saya%20dengan%20kode%20{{ $order->order_code }}" target="_blank" class="inline-block bg-brand hover:bg-brand-dark text-white px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition">
-                                        Tanya Admin
-                                    </a>
+                                    @if($order->status === 'menunggu' && $order->snap_token)
+                                        <button onclick="payOrder('{{ $order->snap_token }}')" class="inline-block bg-brand hover:bg-brand-dark text-white px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition shadow-sm">
+                                            Bayar Sekarang
+                                        </button>
+                                    @else
+                                        <a href="https://api.whatsapp.com/send?phone={{ \App\Models\Setting::where('key', 'wa_number')->value('value') ?? '62895321313124' }}&text=Halo%20Admin,%20saya%20ingin%20menanyakan%20status%20pesanan%20saya%20dengan%20kode%20{{ $order->order_code }}" target="_blank" class="inline-block bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition">
+                                            Tanya Admin
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -94,10 +99,32 @@
         &copy; 2026 Setaman Bogor. Cultivating calm in every corner.
     </footer>
 
-    @if(session('wa_link'))
-        <script>
-            window.open("{{ session('wa_link') }}", '_blank');
-        </script>
-    @endif
+    <!-- Midtrans Snap JS Script -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY', 'SB-Mid-client-6nC_P4H9h7Bvx1ZqI-Uj10nJ') }}"></script>
+    <script>
+        function payOrder(snapToken) {
+            if (snapToken.startsWith('DEMO_TOKEN_')) {
+                alert('Ini adalah pesanan simulasi Midtrans. Token transaksi demo: ' + snapToken);
+                return;
+            }
+            snap.pay(snapToken, {
+                onSuccess: function(result) {
+                    window.location.reload();
+                },
+                onPending: function(result) {
+                    window.location.reload();
+                },
+                onError: function(result) {
+                    alert('Pembayaran gagal, silakan coba lagi.');
+                }
+            });
+        }
+
+        @if(session('pay_snap_token'))
+            document.addEventListener('DOMContentLoaded', function() {
+                payOrder("{{ session('pay_snap_token') }}");
+            });
+        @endif
+    </script>
 </body>
 </html>
